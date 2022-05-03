@@ -48,7 +48,7 @@ public class HiloEscuchadorMensaje extends Thread{
         }
         finally{
             try {
-                EventConexion evtConexion = new  EventConexion(this, new DataConexion(clienteSocket.getPort()+"",clienteSocket.getLocalAddress()+"",clienteSocket));
+                EventConexion evtConexion = new  EventConexion(this, new DataConexion(clienteSocket.getPort()+"",clienteSocket.getLocalAddress()+"",clienteSocket,""));
                 CerrarEventoConexion(evtConexion);
                 in.close();
                 clienteSocket.close();
