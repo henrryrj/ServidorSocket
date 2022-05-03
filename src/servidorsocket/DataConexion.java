@@ -12,7 +12,7 @@ import java.net.Socket;
  * @author stephani
  */
 public class DataConexion {
-     private String IP;
+    private String IP;
     private String Host;
     private Socket SocketCliente;
 

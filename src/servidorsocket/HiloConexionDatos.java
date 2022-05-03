@@ -17,26 +17,26 @@ import javax.swing.event.EventListenerList;
 public class HiloConexionDatos extends Thread {
     ServerSocket Servidor;
     private boolean Continue = true;
-    private EventListenerList ListaEscuchadores = null;
+    private EventListenerList listSocketListener = null;
 
     public HiloConexionDatos(ServerSocket Servidor) {
         this.Servidor = Servidor;
-        ListaEscuchadores = new EventListenerList();
+        listSocketListener = new EventListenerList();
     }
     
     void addEscuchadorConexion(ISocketListener l){
-        ListaEscuchadores.add(ISocketListener.class, l);   
+        listSocketListener.add(ISocketListener.class, l);   
     }
     
     void removeEscuchadorConexion(ISocketListener l){
-        ListaEscuchadores.remove(ISocketListener.class, l);  
+        listSocketListener.remove(ISocketListener.class, l);  
     }
     
     public void shutdown(){}
         
     @Override
     public void run() {
-            System.out.println("Server Conectado: ");
+            System.out.println("Server Conectado !!");
             while (Continue) {      
                 try {
                     Socket clienteSocket = Servidor.accept();
@@ -62,13 +62,13 @@ public class HiloConexionDatos extends Thread {
     
     
     protected void DespachadorEventoConexion(EventConexion e){
-        ISocketListener[] ls = ListaEscuchadores.getListeners(ISocketListener.class);
+        ISocketListener[] ls = listSocketListener.getListeners(ISocketListener.class);
         for(ISocketListener l : ls){
             l.onClienteConectado(e);
         }
     }
     protected void CerrarEventoConexion(EventConexion e){
-        ISocketListener[] ls = ListaEscuchadores.getListeners(ISocketListener.class);
+        ISocketListener[] ls = listSocketListener.getListeners(ISocketListener.class);
         for(ISocketListener l : ls){
             l.onClienteDesconectado(e);
         }

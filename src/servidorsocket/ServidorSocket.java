@@ -16,16 +16,15 @@ import java.util.HashMap;
 public class ServidorSocket implements ISocketListener {
     private ServerSocket Servidor = null;
     private HashMap<String, DataCliente> clientesConectados;
-    
-    HiloConexionDatos controladorClientes = null;
+    HiloConexionDatos conexionClientes = null;
     
     public ServidorSocket(int Puerto){
         try 
         {
             Servidor = new ServerSocket(Puerto);
             clientesConectados = new HashMap<String, DataCliente>();
-            controladorClientes = new HiloConexionDatos(Servidor);
-            controladorClientes.addEscuchadorConexion(this);
+            conexionClientes = new HiloConexionDatos(Servidor);
+            conexionClientes.addEscuchadorConexion(this);
         } 
         catch (IOException e) 
         {
@@ -35,14 +34,11 @@ public class ServidorSocket implements ISocketListener {
     
     @Override
     public void onClienteConectado(EventConexion e) {
-        
-        HiloEscuchadorMensaje cmc = new HiloEscuchadorMensaje(this, e.dato.getSocketCliente());
-        cmc.addEscuchadorMensaje(this);
-        cmc.start();
-        
-        DataCliente dc = new DataCliente(e.dato.getSocketCliente(), cmc);
+        HiloEscuchadorMensaje hem = new HiloEscuchadorMensaje(this, e.dato.getSocketCliente());
+        hem.addEscuchadorMensaje(this);
+        hem.start();
+        DataCliente dc = new DataCliente(e.dato.getSocketCliente(), hem);
         this.clientesConectados.put(e.dato.getSocketCliente().hashCode()+"",dc);
-        
         System.out.println("Nuevo Cliente Conectado: "+e.dato.getSocketCliente().hashCode()+"");
         System.out.println("Clientes conectados: "+this.clientesConectados.size());
     }
@@ -52,21 +48,19 @@ public class ServidorSocket implements ISocketListener {
         String key = e.dato.getSocketCliente().hashCode()+"";
         this.clientesConectados.remove(key);
         
-        System.out.println("cliente desconectado: "+key);
-        System.out.println("clientes conectados : "+this.clientesConectados.size());
+        System.out.println("Cliente Desconectado: "+key);
+        System.out.println("Clientes Conectados : "+this.clientesConectados.size());
     }
 
     @Override
     public void onMensajeCliente(EventMensaje e) {
-        
         System.out.println("Nuevo Mensaje: "+e.mensaje);
     }
 
  public static void main(String[] argv) throws Exception {    
-        int     Puerto  =   6000;
-        
+        int Puerto = 6000;
         ServidorSocket socket = new ServidorSocket(Puerto);
-        socket.controladorClientes.start();
+        socket.conexionClientes.start();
         
     }
 }

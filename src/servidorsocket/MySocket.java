@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author Henrry Roca Joffre
  */
-public class MySocket implements SocketListener{
+public class MySocket{
     private ServerSocket servidor;
 
     public MySocket(int puerto) {
@@ -32,8 +32,8 @@ public class MySocket implements SocketListener{
                 DataOutputStream out = new DataOutputStream(sc.getOutputStream());
                 out.writeUTF("¿Cual es tu nombre?: ");
                 String nombreCliente = in.readUTF();                
-                HiloEscuchador escuchador = new HiloEscuchador(in,out, nombreCliente);
-                escuchador.start();   
+                //HiloEscuchador escuchador = new HiloEscuchador(in,out, nombreCliente);
+                //escuchador.start();   
                 System.out.println("Creada la conexion con: " + nombreCliente);
             }
             
@@ -43,11 +43,6 @@ public class MySocket implements SocketListener{
         }
     }
 
-
-    @Override
-    public void clienteOn() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
 
    

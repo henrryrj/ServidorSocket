@@ -51,14 +51,14 @@ public class ClienteSocket {
             //Se crea el socket para la conexion de clientes
           this.socket = new Socket(Host, Puerto);
           while(Continua){
-            System.out.println("escribe un mensaje o presiona 'Enter' para terminar");
+            System.out.println("Escribe un mensaje o escribe 'salir' para cerrar la conexion: ");
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));          
             out = new DataOutputStream(socket.getOutputStream());
             String msg = br.readLine();
-              if (msg.compareTo("") == 0) {
+              if (msg.compareTo("salir") == 0) {
                   out.close();
                   socket.close();
-                  System.out.println("desconectado");
+                  System.out.println("Desconectado");
                   break;
               }
             //Envio un mensaje al cliente
