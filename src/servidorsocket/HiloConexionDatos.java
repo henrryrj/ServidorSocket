@@ -36,7 +36,7 @@ public class HiloConexionDatos extends Thread {
         
     @Override
     public void run() {
-            System.out.println("Server working");
+            System.out.println("Server Conectado: ");
             while (Continue) {      
                 try {
                     Socket clienteSocket = Servidor.accept();

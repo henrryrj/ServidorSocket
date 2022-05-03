@@ -63,7 +63,7 @@ public class ServidorSocket implements ISocketListener {
     }
 
  public static void main(String[] argv) throws Exception {    
-        int     Puerto  =   3000;
+        int     Puerto  =   6000;
         
         ServidorSocket socket = new ServidorSocket(Puerto);
         socket.controladorClientes.start();
