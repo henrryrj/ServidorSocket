@@ -9,6 +9,10 @@ package servidorsocket;
  *
  * @author Henrry Roca Joffre
  */
-public class ServidorSocket {
+public interface SocketListener {
+    void clienteOn();
+
+    
+            
     
 }

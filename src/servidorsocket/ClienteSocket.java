@@ -9,6 +9,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -17,21 +20,27 @@ import java.net.Socket;
 public class ClienteSocket {
 
     public static void main(String[] args) {
-        final String HOST = "localhost";
-        final int PUERTO = 3000;
-        DataInputStream in;
-        DataOutputStream out;
-
         try {
-            Socket sc = new Socket(HOST, PUERTO); 
-            in = new DataInputStream(sc.getInputStream());
-            out = new DataOutputStream(sc.getOutputStream());
+            Scanner sn = new Scanner(System.in);
+            sn.useDelimiter("\n");
+            Socket sc = new Socket("localhost", 3000);
 
-            out.writeUTF("hola soy un cliente :D ");
-            String msgCliente = in.readUTF();
-            System.out.println(msgCliente);
+            DataInputStream in = new DataInputStream(sc.getInputStream());
+            DataOutputStream out = new DataOutputStream(sc.getOutputStream());
+            
+            String mensaje = in.readUTF();
+            System.out.println(mensaje);
+            
+            String nombreCliente = sn.next();
+            out.writeUTF(nombreCliente);
+            HiloDeDatos datosCliente = new HiloDeDatos(in,out);
+            datosCliente.start();
+            datosCliente.join();
+            
         } catch (IOException ex) {
-            System.err.println("Error de parte del cliente" + ex);
+            Logger.getLogger(ClienteSocket.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(ClienteSocket.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
