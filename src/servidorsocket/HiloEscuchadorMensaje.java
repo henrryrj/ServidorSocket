@@ -37,7 +37,6 @@ public class HiloEscuchadorMensaje extends Thread{
     public void run() {
         try {
             in = new DataInputStream(clienteSocket.getInputStream());
-            
             while (Contiene) {       
                 System.out.println("Escuchando mensaje del cliente...");
                 String clienteCommando = in.readUTF();
@@ -48,7 +47,7 @@ public class HiloEscuchadorMensaje extends Thread{
         }
         finally{
             try {
-                EventConexion evtConexion = new  EventConexion(this, new DataConexion(clienteSocket.getPort()+"",clienteSocket.getLocalAddress()+"",clienteSocket,""));
+                EventConexion evtConexion = new  EventConexion(this, new DataConexion(clienteSocket.getPort()+"",clienteSocket.getLocalAddress()+"",clienteSocket));
                 CerrarEventoConexion(evtConexion);
                 in.close();
                 clienteSocket.close();

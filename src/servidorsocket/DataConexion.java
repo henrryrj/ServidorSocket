@@ -15,23 +15,15 @@ public class DataConexion {
     private String IP;
     private String Host;
     private Socket SocketCliente;
-    private String nombreCliente;
 
-    public DataConexion(String IP, String Host, Socket SocketCliente, String nombre) {
+    public DataConexion(String IP, String Host, Socket SocketCliente) {
         this.IP = IP;
         this.Host = Host;
         this.SocketCliente = SocketCliente;
-        this.nombreCliente = nombre;
     }
 
     public String getHost() {
         return Host;
-    }
-    public String getNombreCliente(){
-        return this.nombreCliente;
-    }
-    public void setNombe(String nombre){
-        this.nombreCliente = nombre;
     }
 
     public void setHost(String Host) {
