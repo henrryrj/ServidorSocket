@@ -5,10 +5,26 @@
  */
 package Conexion;
 
+import java.sql.Connection;
+
 /**
  *
  * @author Erick Vidal
  */
 public class Singleton {
+    private static Singleton singletonConexion;
+    private Conexion conexion;
+    Connection con;
     
+    
+    public Singleton(){
+        this.conexion=new Conexion();
+        this.con=conexion.getConnection();
+    }
+    public Singleton getInstancia(){
+        if (singletonConexion==null) {
+            singletonConexion=new Singleton();
+        }
+        return singletonConexion;
+    }
 }
