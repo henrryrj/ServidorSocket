@@ -3,16 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/steph/Documents/UAGRM/Electivas/3.%20Distribuidos/ServidorSocket/src/servidorsocket/DataCliente.java</file>
-            <file>file:/C:/Users/steph/Documents/UAGRM/Electivas/3.%20Distribuidos/ServidorSocket/src/servidorsocket/HiloConexionDatos.java</file>
-            <file>file:/C:/Users/steph/Documents/UAGRM/Electivas/3.%20Distribuidos/ServidorSocket/src/servidorsocket/ServidorSocket.java</file>
-            <file>file:/C:/Users/steph/Documents/UAGRM/Electivas/3.%20Distribuidos/ServidorSocket/src/servidorsocket/EventConexion.java</file>
-            <file>file:/C:/Users/steph/Documents/UAGRM/Electivas/3.%20Distribuidos/ServidorSocket/src/servidorsocket/ISocketListener.java</file>
-            <file>file:/C:/Users/steph/Documents/UAGRM/Electivas/3.%20Distribuidos/ServidorSocket/src/servidorsocket/DataConexion.java</file>
-            <file>file:/C:/Users/steph/Documents/UAGRM/Electivas/3.%20Distribuidos/ServidorSocket/src/servidorsocket/ClienteSocket.java</file>
-            <file>file:/C:/Users/steph/Documents/UAGRM/Electivas/3.%20Distribuidos/ServidorSocket/src/servidorsocket/Lanzador.java</file>
-            <file>file:/C:/Users/steph/Documents/UAGRM/Electivas/3.%20Distribuidos/ServidorSocket/src/servidorsocket/EventMensaje.java</file>
-            <file>file:/C:/Users/steph/Documents/UAGRM/Electivas/3.%20Distribuidos/ServidorSocket/src/servidorsocket/HiloEscuchadorMensaje.java</file>
+            <file>file:/D:/Project%20Java/ServidorSocket/src/servidorsocket/Lanzador.java</file>
+            <file>file:/D:/Project%20Java/ServidorSocket/src/servidorsocket/ServidorSocket.java</file>
+            <file>file:/D:/Project%20Java/ServidorSocket/src/servidorsocket/ClienteSocket.java</file>
+            <file>file:/D:/Project%20Java/ServidorSocket/src/servidorsocket/DataCliente.java</file>
+            <file>file:/D:/Project%20Java/ServidorSocket/src/servidorsocket/HiloEscuchadorMensaje.java</file>
+            <file>file:/D:/Project%20Java/ServidorSocket/src/servidorsocket/HiloConexionDatos.java</file>
         </group>
     </open-files>
 </project-private>
