@@ -14,22 +14,25 @@ import javax.swing.event.EventListenerList;
  *
  * @author stephani
  */
-public class HiloEscuchadorMensaje extends Thread{
-    private Socket clienteSocket; 
+public class HiloEscuchadorMensaje extends Thread {
+
+    private Socket clienteSocket;
     private boolean Contiene = true;
     private EventListenerList listSocketListener = null;
     private DataInputStream in = null;
+    private DataConexion datos;
 
-    HiloEscuchadorMensaje( ServidorSocket owner, Socket s) {
+    HiloEscuchadorMensaje(ServidorSocket owner, Socket s, DataConexion e) {
         clienteSocket = s;
         listSocketListener = new EventListenerList();
+        this.datos = e;
     }
-    
-    void addEscuchadorMensaje(ISocketListener l){
+
+    void addEscuchadorMensaje(ISocketListener l) {
         listSocketListener.add(ISocketListener.class, l);
     }
-    
-    void  removeEscuchadorMensaje(ISocketListener l){
+
+    void removeEscuchadorMensaje(ISocketListener l) {
         listSocketListener.remove(ISocketListener.class, l);
     }
 
@@ -37,35 +40,35 @@ public class HiloEscuchadorMensaje extends Thread{
     public void run() {
         try {
             in = new DataInputStream(clienteSocket.getInputStream());
-            while (Contiene) {       
+            while (Contiene) {
                 System.out.println("Escuchando mensaje del cliente...");
                 String clienteCommando = in.readUTF();
-                DespachadorEventoMensaje(new EventMensaje(this,clienteCommando));
+                DespachadorEventoMensaje(new EventMensaje(this, clienteCommando, this.datos));
             }
         } catch (IOException e) {
-            
-        }
-        finally{
+
+        } finally {
             try {
-                EventConexion evtConexion = new  EventConexion(this, new DataConexion(clienteSocket.getPort()+"",clienteSocket.getLocalAddress()+"",clienteSocket));
+                EventConexion evtConexion = new EventConexion(this, new DataConexion(clienteSocket.getPort() + "", clienteSocket.getLocalAddress() + "", clienteSocket, ""));
                 CerrarEventoConexion(evtConexion);
                 in.close();
                 clienteSocket.close();
-            } catch (IOException e) { 
+            } catch (IOException e) {
             }
         }
-    
+
     }
-    
-    protected void DespachadorEventoMensaje(EventMensaje e){
+
+    protected void DespachadorEventoMensaje(EventMensaje e) {
         ISocketListener[] ls = listSocketListener.getListeners(ISocketListener.class);
-        for (ISocketListener l : ls){
+        for (ISocketListener l : ls) {
             l.onMensajeCliente(e);
         }
     }
-    protected void CerrarEventoConexion(EventConexion e){
+
+    protected void CerrarEventoConexion(EventConexion e) {
         ISocketListener[] ls = listSocketListener.getListeners(ISocketListener.class);
-        for (ISocketListener l : ls){
+        for (ISocketListener l : ls) {
             l.onClienteDesconectado(e);
         }
     }
