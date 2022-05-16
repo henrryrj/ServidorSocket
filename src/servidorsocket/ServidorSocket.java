@@ -4,12 +4,19 @@
  * and open the template in the editor.
  */
 package servidorsocket;
+<<<<<<< HEAD
 import Conexion.Cliente;
 import Conexion.Mensaje;
+=======
+
+import Conexion.*;
+
+>>>>>>> 9e415b453193edc79799b7b2ace798a9ce82e30f
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,6 +30,8 @@ public class ServidorSocket implements ISocketListener {
     private ServerSocket Servidor = null;
     private HashMap<String, DataCliente> clientesConectados;
     HiloConexionDatos conexionClientes = null;
+    Cliente cl = new Cliente();
+    Mensaje msg = new Mensaje();
 
 //    Cliente cli=new Cliente();
 //    Mensaje men=new Mensaje();
@@ -43,27 +52,63 @@ public class ServidorSocket implements ISocketListener {
 
     @Override
     public void onClienteConectado(EventConexion e) {
-        HiloEscuchadorMensaje hem = new HiloEscuchadorMensaje(this, e.dato.getSocketCliente());
+        HiloEscuchadorMensaje hem = new HiloEscuchadorMensaje(this, e.dato.getSocketCliente(), e.dato);
         hem.addEscuchadorMensaje(this);
         hem.start();
         DataCliente dc = new DataCliente(e.dato.getSocketCliente(), hem);
-        this.clientesConectados.put(e.dato.getSocketCliente().hashCode()+"",dc);
-        System.out.println("Nuevo Cliente Conectado: "+e.dato.getSocketCliente().hashCode()+"");
-        System.out.println("Clientes conectados: "+this.clientesConectados.size());
+        this.clientesConectados.put(e.dato.getSocketCliente().hashCode() + "", dc);
+        System.out.println("Nuevo Cliente Conectado: " + e.dato.getSocketCliente().hashCode() + "");
+        e.dato.setIdCliente(String.valueOf(e.dato.getSocketCliente().hashCode()));
+        System.out.println("Clientes conectados: " + this.clientesConectados.size());
     }
 
     @Override
     public void onClienteDesconectado(EventConexion e) {
-        String key = e.dato.getSocketCliente().hashCode()+"";
+        String key = e.dato.getSocketCliente().hashCode() + "";
         this.clientesConectados.remove(key);
-        
-        System.out.println("Cliente Desconectado: "+key);
-        System.out.println("Clientes Conectados : "+this.clientesConectados.size());
+
+        System.out.println("Cliente Desconectado: " + key);
+        System.out.println("Clientes Conectados : " + this.clientesConectados.size());
     }
 
     @Override
     public void onMensajeCliente(EventMensaje e) {
-        System.out.println("Nuevo Mensaje: " + e.mensaje);
+        enviarMensaje(e.mensaje,e);
+        System.out.println("mensaje enviado...");
+        //System.out.println("nuevo mensaje:" + e.mensaje);
     }
 
+<<<<<<< HEAD
+=======
+    public void enviarMensaje(String idMensaje, EventMensaje e) {
+        DataOutputStream out = null; 
+        try {
+            String id = "";
+            String mensaje = "";
+            int posId = idMensaje.indexOf(":");
+            id = idMensaje.substring(0, posId);
+            cl.setId(Integer.parseInt(e.dato.getIdCliente()));
+            cl.agregar(cl);
+            mensaje = idMensaje.substring(posId + 1, idMensaje.length());
+            //guardando a la bd
+            msg.setIdClienteOrigen(Integer.parseInt(e.dato.getIdCliente()));
+            msg.setIdClienteDestino(Integer.parseInt(id));
+            msg.setMensaje(mensaje);
+            msg.agregar(msg);
+            // buscar al cliente
+            DataCliente cliente = clientesConectados.get(id);   
+            out = new DataOutputStream(cliente.getSocketClient().getOutputStream());
+            out.writeUTF("Cli(" + e.dato.getIdCliente() + "): "+mensaje);
+        } catch (IOException ex) {
+            Logger.getLogger(ServidorSocket.class.getName()).log(Level.SEVERE, null, ex);
+//        } finally {
+//            try {
+//                //out.close();
+//            } catch (IOException ex) {
+//                Logger.getLogger(ServidorSocket.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
+        }
+    }
+>>>>>>> 9e415b453193edc79799b7b2ace798a9ce82e30f
 }

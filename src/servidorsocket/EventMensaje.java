@@ -13,8 +13,10 @@ import java.util.EventObject;
  */
 public class EventMensaje extends EventObject{
     String mensaje;
-    public EventMensaje(Object source, String mensaje) {
+    DataConexion dato;
+    public EventMensaje(Object source, String mensaje, DataConexion d) {
         super(source);
         this.mensaje = mensaje; 
+        this.dato = d;
     }
 }
