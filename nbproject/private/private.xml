@@ -5,10 +5,7 @@
         <group>
             <file>file:/D:/Project%20Java/ServidorSocket/src/servidorsocket/Lanzador.java</file>
             <file>file:/D:/Project%20Java/ServidorSocket/src/servidorsocket/ServidorSocket.java</file>
-            <file>file:/D:/Project%20Java/ServidorSocket/src/servidorsocket/ClienteSocket.java</file>
-            <file>file:/D:/Project%20Java/ServidorSocket/src/servidorsocket/DataCliente.java</file>
-            <file>file:/D:/Project%20Java/ServidorSocket/src/servidorsocket/HiloEscuchadorMensaje.java</file>
-            <file>file:/D:/Project%20Java/ServidorSocket/src/servidorsocket/HiloConexionDatos.java</file>
+            <file>file:/D:/Project%20Java/ServidorSocket/src/Mail/Mail.java</file>
         </group>
     </open-files>
 </project-private>

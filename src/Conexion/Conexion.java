@@ -25,4 +25,7 @@ public class Conexion {
         }
         return con;
     }
+    
+    //orm hacer clase crear
+    
 }

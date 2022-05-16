@@ -37,7 +37,7 @@ public class Cliente {
     public void setId(int id) {
         this.id = id;
     }
-    
+    //4
     public void agregar(Cliente cliente){
         String sql="insert into cliente(id) values(?)";
         try{
