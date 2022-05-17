@@ -2,13 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/D:/Project%20Java/ServidorSocket/src/servidorsocket/Lanzador.java</file>
-            <file>file:/D:/Project%20Java/ServidorSocket/src/servidorsocket/ServidorSocket.java</file>
-            <file>file:/D:/Project%20Java/ServidorSocket/src/servidorsocket/ClienteSocket.java</file>
-            <file>file:/D:/Project%20Java/ServidorSocket/src/servidorsocket/DataCliente.java</file>
-            <file>file:/D:/Project%20Java/ServidorSocket/src/servidorsocket/HiloEscuchadorMensaje.java</file>
-            <file>file:/D:/Project%20Java/ServidorSocket/src/servidorsocket/HiloConexionDatos.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

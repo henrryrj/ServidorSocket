@@ -25,4 +25,5 @@ public class Conexion {
         }
         return con;
     }
+    //guardar un registro
 }
