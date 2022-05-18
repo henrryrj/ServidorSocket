@@ -59,7 +59,7 @@ public class ClienteSocket {
                 //escuchandoMensajes();
                 this.in = new DataInputStream(this.socket.getInputStream());
                 String mensaje = this.in.readUTF();
-                System.out.println(mensaje);
+                if(mensaje !=""){System.out.println(mensaje);}
                 
                 System.out.println("Escriba el id: seguido del mensaje");
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));

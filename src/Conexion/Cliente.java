@@ -16,14 +16,12 @@ import java.sql.ResultSet;
 public class Cliente {
     int id;
     
-    Conexion conectar = new Conexion();
-    Connection con;
     PreparedStatement ps;
     ResultSet rs;
     Singleton s;
 
     public Cliente() {
-        s=new Singleton();
+        this.s= Singleton.getInstancia();
     }
 
     public Cliente(int id) {
@@ -37,7 +35,7 @@ public class Cliente {
     public void setId(int id) {
         this.id = id;
     }
-    
+    //4
     public void agregar(Cliente cliente){
         String sql="insert into cliente(id) values(?)";
         try{

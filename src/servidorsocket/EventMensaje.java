@@ -19,4 +19,7 @@ public class EventMensaje extends EventObject{
         this.mensaje = mensaje; 
         this.dato = d;
     }
+    public String getMensage(){return this.mensaje;}  
+    public DataConexion getDato(){return this.dato;}
+
 }

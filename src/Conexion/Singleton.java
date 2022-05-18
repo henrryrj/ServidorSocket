@@ -21,7 +21,7 @@ public class Singleton {
         this.conexion=new Conexion();
         this.con=conexion.getConnection();
     }
-    public Singleton getInstancia(){
+    public static Singleton getInstancia(){
         if (singletonConexion==null) {
             singletonConexion=new Singleton();
         }

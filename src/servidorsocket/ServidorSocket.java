@@ -4,9 +4,8 @@
  * and open the template in the editor.
  */
 package servidorsocket;
-
-import Conexion.*;
-
+import Conexion.Cliente;
+import Conexion.Mensaje;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -27,6 +26,12 @@ public class ServidorSocket implements ISocketListener {
     HiloConexionDatos conexionClientes = null;
     Cliente cl = new Cliente();
     Mensaje msg = new Mensaje();
+
+//    Cliente cli=new Cliente();
+//    Mensaje men=new Mensaje();
+    
+    
+    
 
     public ServidorSocket(int Puerto) {
         try {
@@ -62,12 +67,11 @@ public class ServidorSocket implements ISocketListener {
 
     @Override
     public void onMensajeCliente(EventMensaje e) {
-        enviarMensaje(e.mensaje,e);
-        System.out.println("mensaje enviado...");
-        //System.out.println("nuevo mensaje:" + e.mensaje);
+        //enviarMensaje(e.mensaje,e);
+        //System.out.println("mensaje enviado...");
+        System.out.println("nuevo mensaje:" + e.mensaje);
     }
-
-    public void enviarMensaje(String idMensaje, EventMensaje e) {
+        public void enviarMensaje(String idMensaje, EventMensaje e) {
         DataOutputStream out = null; 
         try {
             String id = "";
@@ -97,4 +101,5 @@ public class ServidorSocket implements ISocketListener {
 //        }
         }
     }
+
 }
