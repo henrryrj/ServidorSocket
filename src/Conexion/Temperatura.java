@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 public class Temperatura {
 
     int id;
-    float temperatura;
+    double temperatura;
     int idCliente;
 
     PreparedStatement ps;
@@ -22,7 +22,7 @@ public class Temperatura {
         this.s = Singleton.getInstancia();
     }
 
-    public Temperatura(int id, float temperatura, int idCliente) {
+    public Temperatura(int id, double temperatura, int idCliente) {
         this.id = id;
         this.temperatura = temperatura;
         this.idCliente = idCliente;
@@ -32,7 +32,7 @@ public class Temperatura {
         return id;
     }
 
-    public float getTemperatura() {
+    public double getTemperatura() {
         return temperatura;
     }
 
@@ -44,7 +44,7 @@ public class Temperatura {
         this.id = id;
     }
 
-    public void setTemperatura(float temperatura) {
+    public void setTemperatura(Double temperatura) {
         this.temperatura = temperatura;
     }
 
@@ -56,11 +56,20 @@ public class Temperatura {
         String sql = "insert into temperatura(temperatura,idCliente) values(?,?)";
         try {
             ps = s.con.prepareStatement(sql);
-            ps.setFloat(1, temperatura.getTemperatura());
+            ps.setDouble(1, temperatura.getTemperatura());
             ps.setInt(2, temperatura.getIdCliente());
             ps.executeUpdate();
         } catch (Exception e) {
             System.err.println(e);
         }
+    }
+    public void toSring(){
+        System.out.println("Temperatura: {");
+        System.out.println("id: " + this.id);    
+        System.out.println("temperatura: " + this.temperatura);
+        System.out.println("idCliente: " + this.idCliente);
+        System.out.println("}");
+        System.out.println("");
+
     }
 }

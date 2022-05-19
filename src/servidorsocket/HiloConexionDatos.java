@@ -18,7 +18,6 @@ import javax.swing.event.EventListenerList;
  * @author stephani
  */
 public class HiloConexionDatos extends Thread {
-    Cliente cl;
     ServerSocket Servidor;
     private boolean Continue = true;
     private EventListenerList listSocketListener = null;
@@ -44,20 +43,19 @@ public class HiloConexionDatos extends Thread {
         System.out.println("Server Conectado !!");
         while (Continue) {
             try {
-                Socket clienteSocket = Servidor.accept();
-                DataInputStream in = new DataInputStream(clienteSocket.getInputStream());
+                Socket clienteSocket;
+                clienteSocket = Servidor.accept();
                 DataOutputStream out = new DataOutputStream(clienteSocket.getOutputStream());
-                out.writeUTF("Hola Soy el Socket y te he asignado el siguiente id:\nid = " + clienteSocket.hashCode() + "");
-                cl = new Cliente();
-                cl.setId(clienteSocket.hashCode());
-                cl.agregar(cl);
+                out.writeUTF("Hola Soy el Socket y tu id es: " + clienteSocket.hashCode() + "");
                 EventConexion evtConexion = new EventConexion(this, new DataConexion(clienteSocket.getPort() + "", clienteSocket.getLocalAddress() + "", clienteSocket, clienteSocket.hashCode() + ""));
                 DespachadorEventoConexion(evtConexion);
             } catch (IOException e) {
+                System.out.println("My Hilo escuchador se detuvo: " + e);
             } finally {
                 try {
                     System.out.println("");
                 } catch (Exception e) {
+                    System.out.println("que pasa:" + e);
                 }
             }
         }

@@ -16,11 +16,11 @@ import javax.swing.event.EventListenerList;
  */
 public class HiloEscuchadorMensaje extends Thread {
 
-    private Socket clienteSocket;
-    private boolean Contiene = true;
-    private EventListenerList listSocketListener = null;
-    private DataInputStream in = null;
-    private DataConexion datos;
+    private final Socket clienteSocket;
+    private final boolean Contiene = true;
+    private final EventListenerList listSocketListener;
+    private DataInputStream in;
+    private final DataConexion datos;
 
     HiloEscuchadorMensaje(ServidorSocket owner, Socket s, DataConexion e) {
         clienteSocket = s;
@@ -28,12 +28,16 @@ public class HiloEscuchadorMensaje extends Thread {
         this.datos = e;
     }
 
-    void addEscuchadorMensaje(ISocketListener l) {
+    void addEscuchadorMensaje(ISocketListener l, ISocketListener m) {
         listSocketListener.add(ISocketListener.class, l);
+        listSocketListener.add(ISocketListener.class, m);
+
     }
 
-    void removeEscuchadorMensaje(ISocketListener l) {
+    void removeEscuchadorMensaje(ISocketListener l,ISocketListener m) {
         listSocketListener.remove(ISocketListener.class, l);
+        listSocketListener.remove(ISocketListener.class, m);
+
     }
 
     @Override
@@ -46,7 +50,7 @@ public class HiloEscuchadorMensaje extends Thread {
                 DespachadorEventoMensaje(new EventMensaje(this, clienteCommando, this.datos));
             }
         } catch (IOException e) {
-
+            System.err.println(e);
         } finally {
             try {
                 EventConexion evtConexion = new EventConexion(this, new DataConexion(clienteSocket.getPort() + "", clienteSocket.getLocalAddress() + "", clienteSocket, ""));
@@ -54,6 +58,7 @@ public class HiloEscuchadorMensaje extends Thread {
                 in.close();
                 clienteSocket.close();
             } catch (IOException e) {
+                System.err.println(e);
             }
         }
 

@@ -12,7 +12,10 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.InputStreamReader;
+import java.util.Properties;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
@@ -51,17 +54,25 @@ public class ClienteSocket {
         this.Puerto = Puerto;
     }
 
+    public void escuchandoMensaje() {
+        try {
+            this.in = new DataInputStream(this.socket.getInputStream());
+            String mensaje = this.in.readUTF();
+            System.out.println(mensaje);
+        } catch (IOException ex) {
+            Logger.getLogger(ClienteSocket.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public void connect() {
         try {
             //Se crea el socket para la conexion de clientes
             this.socket = new Socket(Host, Puerto);
+            this.in = new DataInputStream(this.socket.getInputStream());
+            String mensaje = this.in.readUTF();
+            System.out.println(mensaje);
             while (Continua) {
-                //escuchandoMensajes();
-                this.in = new DataInputStream(this.socket.getInputStream());
-                String mensaje = this.in.readUTF();
-                if(mensaje !=""){System.out.println(mensaje);}
-                
-                System.out.println("Escriba el id: seguido del mensaje");
+                System.out.println("Escriba un mensaje");
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                 out = new DataOutputStream(socket.getOutputStream());
                 String msg = br.readLine();
@@ -73,32 +84,19 @@ public class ClienteSocket {
                 }
                 //Envio un mensaje al cliente
                 out.writeUTF(msg);
+
             }
         } catch (IOException ex) {
-            Logger.getLogger(ClienteSocket.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ClienteSocket.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public Future<Void> escuchandoMensajes() {
-        Executors.newCachedThreadPool().submit(() -> {
-            try {
-                this.in = new DataInputStream(this.socket.getInputStream());
-                String mensaje = this.in.readUTF();
-                if (mensaje != "") {
-                    System.out.println(mensaje);
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(ClienteSocket.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
-        return null;
-    }
-
     public static void main(String[] args) throws Exception {
-        String Host = "127.0.0.1";
-        int Puerto = 6000;
+        Properties propiedades = new Properties();
+        propiedades.load(new FileReader("datos.properties"));
 
-        ClienteSocket cl = new ClienteSocket(Host, Puerto);
+        ClienteSocket cl = new ClienteSocket(propiedades.getProperty("Host"), Integer.parseInt(propiedades.getProperty("Puerto")));
         cl.connect();
 
     }
