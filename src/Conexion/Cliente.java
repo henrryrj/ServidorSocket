@@ -5,9 +5,9 @@
  */
 package Conexion;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
@@ -45,5 +45,21 @@ public class Cliente {
         }catch(Exception e){
             System.err.println(e);
         }
+    }
+    public boolean esta(int id){
+        String sql="select id from cliente";
+        try {
+            ps=s.con.prepareStatement(sql);
+            rs=ps.executeQuery(sql);
+            while (rs.next()) {                
+                int idConsulta=Integer.valueOf(rs.getString("id"));
+                if (id==idConsulta) {
+                    return true;
+                }
+            }
+        } catch (SQLException | NumberFormatException e) {
+            System.err.println(e);
+        }
+        return false;
     }
 }

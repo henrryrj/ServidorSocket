@@ -4,10 +4,7 @@
  * and open the template in the editor.
  */
 package Mail;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.security.InvalidParameterException;
 import java.util.Properties;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -21,51 +18,29 @@ import javax.mail.internet.MimeMessage;
  * @author Erick Vidal
  */
 public class Mail {
-    private Properties properties;
+     private Properties properties;
     private Session session;
 
-    public Mail(String ruta) throws IOException {
+    public Mail() throws IOException {
         this.properties = new Properties();
-        loadConfig(ruta);
-
+        properties.setProperty("mail.smtp.host", "smtp.gmail.com");
+        properties.setProperty("mail.smtp.starttls.enable", "true");
+        properties.setProperty("mail.smtp.port", "587");
+        properties.setProperty("mail.smtp.auth", "true");
         session = Session.getDefaultInstance(properties);
     }
 
-    private void loadConfig(String ruta) throws InvalidParameterException, IOException {
-        InputStream is = new FileInputStream(ruta);
-        this.properties.load(is);
-        checkConfig();
-    }
-
-    private void checkConfig() throws InvalidParameterException {
-
-        String[] keys = {
-            "mail.smtp.host",
-            "mail.smtp.port",
-            "mail.smtp.user",
-            "mail.smtp.password",
-            "mail.smtp.starttls.enable",
-            "mail.smtp.auth"
-        };
-
-        for (int i = 0; i < keys.length; i++) {
-            if (this.properties.get(keys[i]) == null) {
-                throw new InvalidParameterException("No existe la clave " + keys[i]);
-            }
-        }
-
-    }
-
     public void enviarEmail(String asunto, String mensaje, String correo) throws MessagingException {
-
+        final String correoRemitente = "erickvidal328@gmail.com";
+        final String password = "pcenowaxsmlysrhe";
         MimeMessage contenedor = new MimeMessage(session);
-        contenedor.setFrom(new InternetAddress((String) this.properties.get("mail.smtp.user")));
+        contenedor.setFrom(new InternetAddress(correoRemitente));
         contenedor.addRecipient(Message.RecipientType.TO, new InternetAddress(correo));
         contenedor.setSubject(asunto);
         contenedor.setText(mensaje);
         Transport t = session.getTransport("smtp");
-        t.connect((String) this.properties.get("mail.smtp.user"), (String) this.properties.get("mail.smtp.password"));
-        t.sendMessage(contenedor, contenedor.getAllRecipients());
-
+        t.connect(correoRemitente, password);
+        t.sendMessage(contenedor, contenedor.getRecipients(Message.RecipientType.TO));
+        t.close();
     }
 }

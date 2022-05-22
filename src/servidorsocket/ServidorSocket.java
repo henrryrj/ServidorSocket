@@ -6,6 +6,7 @@
 package servidorsocket;
 
 import Monitor.MonitorTemperatura;
+import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -72,14 +73,15 @@ public class ServidorSocket implements ISocketListener {
     }
 
     public void enviarMensaje(String id, String mensaje) {
+        
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.submit(() -> {
             try {
                 // buscar al cliente
                 DataCliente cliente = clientesConectados.get(id);
                 if (cliente != null) {
-                    DataOutputStream out = new DataOutputStream(cliente.getSocketClient().getOutputStream());
-                    out.writeUTF(mensaje);
+                    BufferedOutputStream out = new BufferedOutputStream(cliente.getSocketClient().getOutputStream());
+                    out.write(mensaje.getBytes());
                 }
             } catch (IOException ex) {
                 Logger.getLogger(ServidorSocket.class.getName()).log(Level.SEVERE, null, ex);

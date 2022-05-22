@@ -5,9 +5,11 @@
  */
 package servidorsocket;
 
-import java.io.DataInputStream;
+import java.io.BufferedInputStream;
+
 import java.io.IOException;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import javax.swing.event.EventListenerList;
 
 /**
@@ -19,7 +21,7 @@ public class HiloEscuchadorMensaje extends Thread {
     private final Socket clienteSocket;
     private final boolean Contiene = true;
     private final EventListenerList listSocketListener;
-    private DataInputStream in;
+    private BufferedInputStream in;
     private final DataConexion datos;
 
     HiloEscuchadorMensaje(ServidorSocket owner, Socket s, DataConexion e) {
@@ -43,11 +45,13 @@ public class HiloEscuchadorMensaje extends Thread {
     @Override
     public void run() {
         try {
-            in = new DataInputStream(clienteSocket.getInputStream());
+            in = new BufferedInputStream(clienteSocket.getInputStream(),128);
             while (Contiene) {
                 System.out.println("Escuchando mensaje del cliente...");
-                String clienteCommando = in.readUTF();
-                DespachadorEventoMensaje(new EventMensaje(this, clienteCommando, this.datos));
+                byte[] clienteCommando=new byte[128];
+                in.read(clienteCommando);
+                String m = new String(clienteCommando, StandardCharsets.UTF_8);
+                DespachadorEventoMensaje(new EventMensaje(this, m, this.datos));
             }
         } catch (IOException e) {
             System.err.println(e);

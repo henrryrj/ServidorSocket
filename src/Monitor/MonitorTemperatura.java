@@ -6,11 +6,13 @@
 package Monitor;
 
 import Conexion.Cliente;
+import Conexion.Reglas;
 import Conexion.Temperatura;
 import Mail.Mail;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,7 +47,11 @@ public class MonitorTemperatura implements ISocketListener {
     @Override
     public void onMensajeCliente(EventMensaje e) {
         cl.setId(Integer.parseInt(e.getDato().getIdCliente()));
-        cl.agregar(cl);
+        if (!cl.esta(Integer.parseInt(e.getDato().getIdCliente()))) {
+            cl.agregar(cl);
+        }else{
+            System.out.println("Gracias por volver a conectarte....");
+        }
         tem.setTemperatura(Double.parseDouble(e.getMensage()));
         tem.setIdCliente(cl.getId());
         tem.toSring();
@@ -54,8 +60,12 @@ public class MonitorTemperatura implements ISocketListener {
         tem.setIdCliente(Integer.parseInt(e.getDato().getIdCliente()));
         tem.agregar(tem);
         System.out.println("Temperatura guardada...");
-        // enviar mensaje al correo....
-        
+        try {
+            Reglas r=new Reglas();
+            r.verificarReglas(Double.parseDouble(mensaje));
+        } catch (IOException | SQLException | MessagingException ex) {
+            Logger.getLogger(MonitorTemperatura.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public static void main(String[] args) throws Exception {
