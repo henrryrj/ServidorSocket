@@ -94,7 +94,6 @@ public class Reglas {
         }
     }
     
-    
     public void verificarReglas(double tem) throws SQLException, MessagingException{
         String consulta="select temMin,temMax,mensaje,correo from reglas";
         ps=s.con.prepareStatement(consulta);
@@ -105,8 +104,6 @@ public class Reglas {
             String men=rs.getString("mensaje");
             men=men+"El dia y Hora: "+LocalDateTime.now()+"con una temperatura de: "+tem+" °C";
             String corre=rs.getString("correo");
-            
-            
             if (min>tem && tem<max) {
                 m.enviarEmail("Cuidado con su monito de Temperatura", men, corre);
                 System.out.println("Correo enviado...");

@@ -70,6 +70,5 @@ public class Temperatura {
         System.out.println("idCliente: " + this.idCliente);
         System.out.println("}");
         System.out.println("");
-
     }
 }

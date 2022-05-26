@@ -95,7 +95,6 @@ public class ClienteSocket {
     public static void main(String[] args) throws Exception {
         Properties propiedades = new Properties();
         propiedades.load(new FileReader("datos.properties"));
-
         ClienteSocket cl = new ClienteSocket(propiedades.getProperty("Host"), Integer.parseInt(propiedades.getProperty("Puerto")));
         cl.connect();
 
