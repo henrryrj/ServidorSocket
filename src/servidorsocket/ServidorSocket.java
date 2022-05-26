@@ -7,7 +7,6 @@ package servidorsocket;
 
 import Monitor.MonitorTemperatura;
 import java.io.BufferedOutputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.HashMap;
@@ -69,7 +68,7 @@ public class ServidorSocket implements ISocketListener {
 
     @Override
     public void onMensajeCliente(EventMensaje e) {
-        System.out.println(e.mensaje);
+        System.out.println(e.mensaje.substring(2, e.mensaje.length()));
     }
 
     public void enviarMensaje(String id, String mensaje) {
@@ -77,7 +76,6 @@ public class ServidorSocket implements ISocketListener {
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.submit(() -> {
             try {
-                // buscar al cliente
                 DataCliente cliente = clientesConectados.get(id);
                 if (cliente != null) {
                     BufferedOutputStream out = new BufferedOutputStream(cliente.getSocketClient().getOutputStream());

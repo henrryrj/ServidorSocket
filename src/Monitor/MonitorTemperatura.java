@@ -13,6 +13,7 @@ import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,28 +47,50 @@ public class MonitorTemperatura implements ISocketListener {
 
     @Override
     public void onMensajeCliente(EventMensaje e) {
-        cl.setId(Integer.parseInt(e.getDato().getIdCliente()));
-        if (!cl.esta(Integer.parseInt(e.getDato().getIdCliente()))) {
-            cl.agregar(cl);
-        }else{
-            System.out.println("Gracias por volver a conectarte....");
-        }
-        tem.setTemperatura(Double.parseDouble(e.getMensage()));
-        tem.setIdCliente(cl.getId());
-        tem.toSring();
-        String mensaje = e.getMensage();
-        tem.setTemperatura(Double.parseDouble(mensaje));
-        tem.setIdCliente(Integer.parseInt(e.getDato().getIdCliente()));
-        tem.agregar(tem);
-        System.out.println("Temperatura guardada...");
-        try {
-            Reglas r=new Reglas();
-            r.verificarReglas(Double.parseDouble(mensaje));
-        } catch (IOException | SQLException | MessagingException ex) {
-            Logger.getLogger(MonitorTemperatura.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        LinkedList<String> lista=listaDeDatos(e.getMensage());
+        System.out.println(lista.toString());
+//        cl.setId(Integer.parseInt(e.getDato().getIdCliente()));
+//        if (!cl.existe(Integer.parseInt(e.getDato().getIdCliente()))) {
+//            cl.agregar(cl);
+//        }else{
+//            System.out.println("Gracias por volver a conectarte....");
+//        }
+//        tem.setTemperatura(Double.parseDouble(e.getMensage()));
+//        tem.setIdCliente(cl.getId());
+//        tem.toSring();
+//        String mensaje = e.getMensage();
+//        tem.setTemperatura(Double.parseDouble(mensaje));
+//        tem.setIdCliente(Integer.parseInt(e.getDato().getIdCliente()));
+//        tem.agregar(tem);
+//        System.out.println("Temperatura guardada...");
+//        try {
+//            Reglas r=new Reglas();
+//            r.verificarReglas(Double.parseDouble(mensaje));
+//        } catch (IOException | SQLException | MessagingException ex) {
+//            Logger.getLogger(MonitorTemperatura.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
+    public LinkedList<String> listaDeDatos(String parse){
+        LinkedList<String> l1=new LinkedList<>();
+        String dato="";
+        int posBarra=0;
+        for (int i = 0; i < 4; i++) {
+            int posIncial=parse.indexOf("=");
+            if (i==3) {
+                dato=parse.substring(posIncial+1,parse.length());
+                parse=parse.substring(posIncial+1, parse.length());
+                
+
+            }else{
+                posBarra=parse.indexOf("|");
+                dato=parse.substring(posIncial+1,posBarra);
+                parse=parse.substring(posBarra+1, parse.length());
+            }
+            l1.add(dato);
+        }
+        return l1;
+    }
     public static void main(String[] args) throws Exception {
         Properties propiedades = new Properties();
         propiedades.load(new FileReader("datos.properties"));

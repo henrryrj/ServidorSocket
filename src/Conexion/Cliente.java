@@ -46,20 +46,16 @@ public class Cliente {
             System.err.println(e);
         }
     }
-    public boolean esta(int id){
-        String sql="select id from cliente";
+    public boolean existe(int id){
+        String sql="select id from cliente where id="+id;
         try {
             ps=s.con.prepareStatement(sql);
             rs=ps.executeQuery(sql);
-            while (rs.next()) {                
-                int idConsulta=Integer.valueOf(rs.getString("id"));
-                if (id==idConsulta) {
-                    return true;
-                }
-            }
+            return rs.first();
         } catch (SQLException | NumberFormatException e) {
             System.err.println(e);
         }
         return false;
     }
+
 }
