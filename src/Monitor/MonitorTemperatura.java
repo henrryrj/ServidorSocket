@@ -49,10 +49,12 @@ public class MonitorTemperatura implements ISocketListener {
 
     @Override
     public void onMensajeCliente(EventMensaje e) {
+        try {
         LinkedList<String> lista=listaDeDatos(e.getMensage());
         System.out.println(lista.toString());
         cl.setId(Integer.parseInt(e.getDato().getIdCliente()));
         if (!cl.existe(Integer.parseInt(e.getDato().getIdCliente()))) {
+            cl.setId(Integer.parseInt(lista.get(0)));
             cl.agregar(cl);
         }else{
             System.out.println("Gracias por volver a conectarte....");
@@ -64,7 +66,6 @@ public class MonitorTemperatura implements ISocketListener {
         sen.toSring();
         sen.agregar(sen);
         System.out.println("Temperatura guardada...");
-        try {
             Reglas r=new Reglas();
             System.out.println("verificando temperatura...");
             r.verificarReglas(sen.getTemp());

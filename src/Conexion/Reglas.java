@@ -102,9 +102,9 @@ public class Reglas {
             double min=Double.valueOf(rs.getString("temMin"));
             double max=Double.valueOf(rs.getString("temMax"));
             String men=rs.getString("mensaje");
-            men=men+"El dia y Hora: "+LocalDateTime.now()+"con una temperatura de: "+tem+" °C";
+            men=men+" El dia y Hora: "+LocalDateTime.now()+", con una temperatura de: "+tem+" °C";
             String corre=rs.getString("correo");
-            if (min>tem && tem<max) {
+            if (tem>min && tem<max) {
                 m.enviarEmail("Cuidado con su monito de Temperatura", men, corre);
                 System.out.println("Correo enviado...");
             }
