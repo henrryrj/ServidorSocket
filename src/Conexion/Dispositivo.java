@@ -13,18 +13,18 @@ import java.sql.SQLException;
  *
  * @author Erick Vidal
  */
-public class Cliente {
+public class Dispositivo {
     int id;
     
     PreparedStatement ps;
     ResultSet rs;
     Singleton s;
 
-    public Cliente() {
+    public Dispositivo() {
         this.s= Singleton.getInstancia();
     }
 
-    public Cliente(int id) {
+    public Dispositivo(int id) {
         this.id = id;
     }
 
@@ -36,8 +36,8 @@ public class Cliente {
         this.id = id;
     }
     //4
-    public void agregar(Cliente cliente){
-        String sql="insert into cliente(id) values(?)";
+    public void agregar(Dispositivo cliente){
+        String sql="insert into dispositivo(id) values(?)";
         try{
             ps=s.con.prepareStatement(sql);
             ps.setInt(1, cliente.getId());
@@ -47,7 +47,7 @@ public class Cliente {
         }
     }
     public boolean existe(int id){
-        String sql="select id from cliente where id="+id;
+        String sql="select id from dispositivo where id="+id;
         try {
             ps=s.con.prepareStatement(sql);
             rs=ps.executeQuery(sql);

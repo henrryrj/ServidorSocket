@@ -15,10 +15,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.util.Properties;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.FutureTask;
+
 
 /**
  *
@@ -30,7 +27,7 @@ public class ClienteSocket {
     private int Puerto;
     private DataOutputStream out;
     private DataInputStream in;
-    private boolean Continua = true;
+    private final boolean Continua = true;
     private Socket socket = null;
 
     public ClienteSocket(String Host, int Puerto) {
@@ -97,7 +94,6 @@ public class ClienteSocket {
         propiedades.load(new FileReader("datos.properties"));
         ClienteSocket cl = new ClienteSocket(propiedades.getProperty("Host"), Integer.parseInt(propiedades.getProperty("Puerto")));
         cl.connect();
-
     }
 
 }

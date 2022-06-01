@@ -12,7 +12,7 @@ import java.sql.ResultSet;
  *
  * @author henrr
  */
-public class Sensor {
+public class Monitor {
 
     int id;
     int idCliente;
@@ -25,11 +25,11 @@ public class Sensor {
     ResultSet rs;
     Singleton s;
 
-    public Sensor() {
+    public Monitor() {
         this.s = Singleton.getInstancia();
     }
 
-    public Sensor(int id, int idCliente, double Temp, double Hum, String Tiempo, PreparedStatement ps, ResultSet rs, Singleton s) {
+    public Monitor(int id, int idCliente, double Temp, double Hum, String Tiempo, PreparedStatement ps, ResultSet rs, Singleton s) {
         this.id = id;
         this.idCliente = idCliente;
         this.Temp = Temp;
@@ -77,8 +77,8 @@ public class Sensor {
         this.Tiempo = Tiempo;
     }
 
-    public void agregar(Sensor sensor) {
-        String sql = "insert into sensor(idCliente,Temp,Hum,Tiempo,time) values(?,?,?,?,CURRENT_TIMESTAMP)";
+    public void agregar(Monitor sensor) {
+        String sql = "insert into monitor(idCliente,Temp,Hum,Tiempo,time) values(?,?,?,?,CURRENT_TIMESTAMP())";
         try {
             ps = s.con.prepareStatement(sql);
             ps.setInt(1, sensor.getIdCliente());
@@ -92,7 +92,7 @@ public class Sensor {
     }
 
     public void toSring() {
-        System.out.println("Sensor: {");
+        System.out.println("Monitor: {");
         //System.out.println("id: " + this.id);
         System.out.println("idCliente: " + this.idCliente);
         System.out.println("Temp: " + this.Temp);

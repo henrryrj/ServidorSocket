@@ -5,9 +5,9 @@
  */
 package Monitor;
 
-import Conexion.Cliente;
+import Conexion.Dispositivo;
 import Conexion.Reglas;
-import Conexion.Sensor;
+import Conexion.Monitor;
 import Conexion.Temperatura;
 import Mail.Mail;
 import java.io.FileInputStream;
@@ -27,12 +27,12 @@ import servidorsocket.EventMensaje;
  * @author Henrry Roca Joffre
  */
 public class MonitorTemperatura implements ISocketListener {
-    Cliente cl;
+    Dispositivo cl;
     //Temperatura tem;
-    Sensor sen;
+    Monitor sen;
     public MonitorTemperatura() {
-        this.cl = new Cliente();
-        this.sen = new Sensor();
+        this.cl = new Dispositivo();
+        this.sen = new Monitor();
         //this.tem = new Temperatura();
     }
 
@@ -81,8 +81,8 @@ public class MonitorTemperatura implements ISocketListener {
         for (int i = 0; i < 4; i++) {
             int posIncial=parse.indexOf("=");
             if (i==3) {
-                dato=parse.substring(posIncial+1,parse.length());
-                parse=parse.substring(posIncial+1, parse.length());
+                dato=parse.substring(posIncial+1,parse.indexOf("\u0000"));
+                parse=parse.substring(posIncial+1, parse.indexOf("\u0000"));
                 
 
             }else{
