@@ -11,15 +11,23 @@ import java.util.EventObject;
  *
  * @author stephani
  */
-public class EventMensaje extends EventObject{
+public class EventMensaje extends EventObject {
+
     String mensaje;
     DataConexion dato;
+
     public EventMensaje(Object source, String mensaje, DataConexion d) {
         super(source);
-        this.mensaje = mensaje; 
+        this.mensaje = mensaje;
         this.dato = d;
     }
-    public String getMensage(){return this.mensaje;}  
-    public DataConexion getDato(){return this.dato;}
+
+    public String getMensage() {
+        return this.mensaje;
+    }
+
+    public DataConexion getDato() {
+        return this.dato;
+    }
 
 }

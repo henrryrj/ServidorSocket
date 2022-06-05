@@ -7,6 +7,8 @@ package Conexion;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 /**
  *
@@ -77,18 +79,28 @@ public class Monitor {
         this.Tiempo = Tiempo;
     }
 
-    public void agregar(Monitor sensor) {
-        String sql = "insert into monitor(idCliente,Temp,Hum,Tiempo,time) values(?,?,?,?,CURRENT_TIMESTAMP())";
+    public String agregar(Monitor sensor) {
+        String sql = "insert into monitor(idCliente,Temp,Hum,Tiempo,time) values(?,?,?,?,?)";
         try {
             ps = s.con.prepareStatement(sql);
             ps.setInt(1, sensor.getIdCliente());
             ps.setDouble(2, sensor.getTemp());
             ps.setDouble(3, sensor.getHum());
             ps.setString(4, sensor.getTiempo());
+            String fecha = getFecha();
+            ps.setString(5, fecha);
             ps.executeUpdate();
-        } catch (Exception e) {
-            System.err.println(e);
+            System.out.println("Temperatura guardada!");
+            return fecha;
+        } catch (SQLException e) {
+            System.out.println("solo entra aca");
+            return "-1";
         }
+    }
+
+    public String getFecha() {
+        String fecha = LocalDateTime.now().toString();
+        return fecha.replace("T", " ");
     }
 
     public void toSring() {

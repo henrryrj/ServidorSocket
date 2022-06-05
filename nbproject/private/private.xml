@@ -2,13 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/D:/Project%20Java/Socket2.0/ServidorSocket/src/Monitor/MonitorTemperatura.java</file>
-            <file>file:/D:/Project%20Java/Socket2.0/ServidorSocket/src/Mail/Mail.java</file>
-            <file>file:/D:/Project%20Java/Socket2.0/ServidorSocket/src/servidorsocket/HiloEscuchadorMensaje.java</file>
-            <file>file:/D:/Project%20Java/Socket2.0/ServidorSocket/src/Conexion/Reglas.java</file>
-            <file>file:/D:/Project%20Java/Socket2.0/ServidorSocket/src/servidorsocket/ClienteSocket.java</file>
-            <file>file:/D:/Project%20Java/Socket2.0/ServidorSocket/src/Conexion/Cliente.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

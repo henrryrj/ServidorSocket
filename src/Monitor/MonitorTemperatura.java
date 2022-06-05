@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.MessagingException;
@@ -27,19 +29,25 @@ import servidorsocket.EventMensaje;
  * @author Henrry Roca Joffre
  */
 public class MonitorTemperatura implements ISocketListener {
+
     Dispositivo cl;
     //Temperatura tem;
     Monitor sen;
+
     public MonitorTemperatura() {
         this.cl = new Dispositivo();
         this.sen = new Monitor();
         //this.tem = new Temperatura();
     }
 
-
     @Override
     public void onClienteConectado(EventConexion e) {
-        // que se va implementar???
+        cl.setId(Integer.parseInt(e.getDato().getIdCliente()));
+        if (!cl.existe(cl.getId())) {
+            cl.agregar(cl);
+        } else {
+            System.out.println("Gracias por volver a conectarte....");
+        }
     }
 
     @Override
@@ -50,23 +58,10 @@ public class MonitorTemperatura implements ISocketListener {
     @Override
     public void onMensajeCliente(EventMensaje e) {
         try {
-        LinkedList<String> lista=listaDeDatos(e.getMensage());
-        System.out.println(lista.toString());
-        cl.setId(Integer.parseInt(e.getDato().getIdCliente()));
-        if (!cl.existe(Integer.parseInt(e.getDato().getIdCliente()))) {
-            cl.setId(Integer.parseInt(lista.get(0)));
-            cl.agregar(cl);
-        }else{
-            System.out.println("Gracias por volver a conectarte....");
-        }
-        sen.setIdCliente(Integer.parseInt(lista.get(0)));
-        sen.setTemp(Double.parseDouble(lista.get(1)));
-        sen.setHum(Double.parseDouble(lista.get(2)));
-        sen.setTiempo(lista.get(3));
-        sen.toSring();
-        sen.agregar(sen);
-        System.out.println("Temperatura guardada...");
-            Reglas r=new Reglas();
+            LinkedList<String> lista = listaDeDatos(e.getMensage());
+            //System.out.println(lista.toString());
+            guardarTem(lista);
+            Reglas r = new Reglas();
             System.out.println("verificando temperatura...");
             r.verificarReglas(sen.getTemp());
         } catch (IOException | SQLException | MessagingException ex) {
@@ -74,31 +69,51 @@ public class MonitorTemperatura implements ISocketListener {
         }
     }
 
-    public LinkedList<String> listaDeDatos(String parse){
-        LinkedList<String> l1=new LinkedList<>();
-        String dato="";
-        int posBarra=0;
+    public LinkedList<String> listaDeDatos(String parse) {
+        LinkedList<String> l1 = new LinkedList<>();
+        String dato = "";
+        int posBarra = 0;
         for (int i = 0; i < 4; i++) {
-            int posIncial=parse.indexOf("=");
-            if (i==3) {
-                dato=parse.substring(posIncial+1,parse.indexOf("\u0000"));
-                parse=parse.substring(posIncial+1, parse.indexOf("\u0000"));
-                
+            int posIncial = parse.indexOf("=");
+            if (i == 3) {
+                dato = parse.substring(posIncial + 1, parse.indexOf("\u0000"));
+                parse = parse.substring(posIncial + 1, parse.indexOf("\u0000"));
 
-            }else{
-                posBarra=parse.indexOf("|");
-                dato=parse.substring(posIncial+1,posBarra);
-                parse=parse.substring(posBarra+1, parse.length());
+            } else {
+                posBarra = parse.indexOf("|");
+                dato = parse.substring(posIncial + 1, posBarra);
+                parse = parse.substring(posBarra + 1, parse.length());
             }
             l1.add(dato);
         }
         return l1;
     }
+
+    public void guardarTem(LinkedList<String> lista) {
+        ExecutorService executor = Executors.newCachedThreadPool();
+        executor.submit(() -> {
+            sen.setIdCliente(Integer.parseInt(lista.get(0)));
+            sen.setTemp(Double.parseDouble(lista.get(1)));
+            sen.setHum(Double.parseDouble(lista.get(2)));
+            sen.setTiempo(lista.get(3));
+            sen.toSring();
+            cl.setId(Integer.parseInt(lista.get(0)));
+            cl.setTem(Double.parseDouble(lista.get(1)));
+            cl.setHum(Double.parseDouble(lista.get(2)));
+            String fechaReg = sen.agregar(sen);
+            if (!fechaReg.equals("-1")) {
+                cl.setUltimoRegistro(fechaReg);
+                cl.updateRegistro(cl);
+            }
+        });
+        executor.shutdown();
+    }
+
     public static void main(String[] args) throws Exception {
         Properties propiedades = new Properties();
         propiedades.load(new FileReader("datos.properties"));
         ServidorSocket servidor = new ServidorSocket(Integer.parseInt(propiedades.getProperty("Puerto")));
         servidor.getConexionCliente().start();
-        
+
     }
 }

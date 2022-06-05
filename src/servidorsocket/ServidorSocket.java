@@ -30,7 +30,8 @@ public class ServidorSocket implements ISocketListener {
             Servidor = new ServerSocket(Puerto);
             clientesConectados = new HashMap<>();
             conexionClientes = new HiloConexionDatos(Servidor);
-            conexionClientes.addEscuchadorConexion(this);
+            MonitorTemperatura monitor = new MonitorTemperatura();
+            conexionClientes.addEscuchadorConexion(this, monitor);
         } catch (IOException e) {
             System.out.println("algo paso con el servidor: " + e);
         }

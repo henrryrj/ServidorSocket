@@ -26,12 +26,14 @@ public class HiloConexionDatos extends Thread {
         listSocketListener = new EventListenerList();
     }
 
-    void addEscuchadorConexion(ISocketListener l) {
+    void addEscuchadorConexion(ISocketListener l, ISocketListener m) {
         listSocketListener.add(ISocketListener.class, l);
+        listSocketListener.add(ISocketListener.class, m);
     }
 
-    void removeEscuchadorConexion(ISocketListener l) {
-        listSocketListener.remove(ISocketListener.class, l);
+    void removeEscuchadorConexion(ISocketListener l, ISocketListener m) {
+        listSocketListener.add(ISocketListener.class, l);
+        listSocketListener.add(ISocketListener.class, m);
     }
 
     public void shutdown() {
@@ -45,7 +47,7 @@ public class HiloConexionDatos extends Thread {
                 Socket clienteSocket;
                 clienteSocket = Servidor.accept();
                 DataOutputStream out = new DataOutputStream(clienteSocket.getOutputStream());
-                out.writeUTF("Hola Soy el Socket y tu id es: " + clienteSocket.hashCode() + "");
+                out.writeUTF("Hola Soy el Socket y tu id es:" + clienteSocket.hashCode() + "");
                 EventConexion evtConexion = new EventConexion(this, new DataConexion(clienteSocket.getPort() + "", clienteSocket.getLocalAddress() + "", clienteSocket, clienteSocket.hashCode() + ""));
                 DespachadorEventoConexion(evtConexion);
             } catch (IOException e) {
