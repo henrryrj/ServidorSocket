@@ -106,7 +106,7 @@ public class ClienteSocket {
                     out = new DataOutputStream(socket.getOutputStream());
                     String dato;
                     DecimalFormat formato1 = new DecimalFormat("#.00");
-                    double tem = (double) (Math.random() * (50 -11) +11);
+                    double tem = (double) (Math.random() * 60);
                     double hum = (double) (Math.random() * 80);
                     long tiempo = (long) (Math.random() * 1000000);
                     tem = Double.parseDouble(formato1.format(tem).replace(",", "."));
