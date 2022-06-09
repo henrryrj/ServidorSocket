@@ -47,12 +47,12 @@ public class ServidorSocket implements ISocketListener {
             HiloEscuchadorMensaje hem = new HiloEscuchadorMensaje(this, e.dato.getSocketCliente(), e.dato);
             MonitorTemperatura monitor = new MonitorTemperatura();
             hem.addEscuchadorMensaje(this, monitor);
-            hem.start();
             DataCliente dc = new DataCliente(e.dato.getSocketCliente(), hem);
             this.clientesConectados.put(e.dato.getSocketCliente().hashCode() + "", dc);
             System.out.println("Nuevo Cliente Conectado: " + e.dato.getSocketCliente().hashCode() + "");
             e.dato.setIdCliente(String.valueOf(e.dato.getSocketCliente().hashCode()));
             System.out.println("Clientes conectados: " + this.clientesConectados.size());
+            hem.start();
         } catch (Exception ex) {
             System.out.println(ex);
         }
@@ -64,16 +64,15 @@ public class ServidorSocket implements ISocketListener {
         String key = e.dato.getSocketCliente().hashCode() + "";
         this.clientesConectados.remove(key);
         System.out.println("Cliente Desconectado: " + key);
-        System.out.println("Clientes Conectados : " + this.clientesConectados.size());
+        System.out.println("Clientes Conectados : " + this.clientesConectados.size() + "\n");
     }
 
     @Override
     public void onMensajeCliente(EventMensaje e) {
-        System.out.println(e.mensaje.substring(2, e.mensaje.length()));
+        System.out.println(e.mensaje + "\n");
     }
 
     public void enviarMensaje(String id, String mensaje) {
-        
         ExecutorService executor = Executors.newCachedThreadPool();
         executor.submit(() -> {
             try {

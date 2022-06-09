@@ -54,10 +54,10 @@ public class HiloEscuchadorMensaje extends Thread {
                 DespachadorEventoMensaje(new EventMensaje(this, m, this.datos));
             }
         } catch (IOException e) {
-            System.out.println("cliente desconectado. Dejando de escuchar mensajes...");
+            System.out.println("cliente desconectado. Dejando de escuchar mensajes...\n");
         } finally {
             try {
-                EventConexion evtConexion = new EventConexion(this, new DataConexion(clienteSocket.getPort() + "", clienteSocket.getLocalAddress() + "", clienteSocket, ""));
+                EventConexion evtConexion = new EventConexion(this, new DataConexion(clienteSocket.getPort() + "", clienteSocket.getLocalAddress() + "", clienteSocket, clienteSocket.hashCode() +""));
                 CerrarEventoConexion(evtConexion);
                 in.close();
                 clienteSocket.close();

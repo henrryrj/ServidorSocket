@@ -41,22 +41,22 @@ public class HiloConexionDatos extends Thread {
 
     @Override
     public void run() {
-        System.out.println("Server Conectado !!");
+        System.out.println("Server Conectado!! \n");
         while (Continue) {
             try {
                 Socket clienteSocket;
                 clienteSocket = Servidor.accept();
                 DataOutputStream out = new DataOutputStream(clienteSocket.getOutputStream());
-                out.writeUTF("Hola Soy el Socket y tu id es:" + clienteSocket.hashCode() + "");
+                out.writeUTF(String.valueOf(clienteSocket.hashCode()));
                 EventConexion evtConexion = new EventConexion(this, new DataConexion(clienteSocket.getPort() + "", clienteSocket.getLocalAddress() + "", clienteSocket, clienteSocket.hashCode() + ""));
                 DespachadorEventoConexion(evtConexion);
             } catch (IOException e) {
-                System.out.println("My Hilo escuchador se detuvo: " + e);
+                System.err.println("My Hilo escuchador se detuvo: " + e);
             } finally {
                 try {
                     System.out.println("");
                 } catch (Exception e) {
-                    System.out.println("que pasa:" + e);
+                    System.err.println("que pasa:" + e);
                 }
             }
         }

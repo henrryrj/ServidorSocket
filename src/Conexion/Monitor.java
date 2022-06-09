@@ -93,7 +93,6 @@ public class Monitor {
             System.out.println("Temperatura guardada!");
             return fecha;
         } catch (SQLException e) {
-            System.out.println("solo entra aca");
             return "-1";
         }
     }
@@ -112,7 +111,6 @@ public class Monitor {
         System.out.println("Tiempo: " + this.Tiempo);
         //System.out.println("time: " + this.time);
         System.out.println("}");
-        System.out.println("");
     }
 
 }

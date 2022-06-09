@@ -108,7 +108,7 @@ public class Reglas {
             men=men+" El dia y Hora: "+getFecha()+", con una temperatura de: "+tem+" °C";
             String corre=rs.getString("correo");
             if (tem>min && tem<max) {
-                m.enviarEmail("Cuidado con su monito de Temperatura", men, corre);
+                m.enviarEmail("Revisa tu dispositivo de Temperatura", men, corre);
                 System.out.println("Correo enviado...");
             }
         }

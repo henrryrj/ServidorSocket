@@ -25,8 +25,8 @@ import javax.mail.internet.MimeMessage;
  */
 public class Mail {
 
-    private Properties properties;
-    private Session session;
+    private final Properties properties;
+    private final Session session;
 
     public Mail() throws IOException {
         this.properties = new Properties();

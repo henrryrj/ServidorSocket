@@ -1,8 +1,8 @@
 package Conexion;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
@@ -59,7 +59,7 @@ public class Temperatura {
             ps.setDouble(1, temperatura.getTemperatura());
             ps.setInt(2, temperatura.getIdCliente());
             ps.executeUpdate();
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.err.println(e);
         }
     }

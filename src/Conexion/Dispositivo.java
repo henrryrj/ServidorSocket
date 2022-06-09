@@ -18,6 +18,7 @@ public class Dispositivo {
     int id;
     double Tem;
     double Hum;
+    boolean estado;
     String ultimoRegistro;
 
     PreparedStatement ps;
@@ -28,10 +29,11 @@ public class Dispositivo {
         this.s = Singleton.getInstancia();
     }
 
-    public Dispositivo(int id, double tem, double hum, String fechaReg) {
+    public Dispositivo(int id, double tem, double hum, String fechaReg, boolean estado) {
         this.id = id;
         this.Tem = tem;
         this.Hum = hum;
+        this.estado = estado;
         this.ultimoRegistro = fechaReg;
     }
 
@@ -51,6 +53,10 @@ public class Dispositivo {
         return ultimoRegistro;
     }
 
+    public boolean getEstado() {
+        return this.estado;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -67,15 +73,28 @@ public class Dispositivo {
         this.ultimoRegistro = ultimoRegistro;
     }
 
+    public void setEstado(boolean estado) {
+        this.estado = estado;
+    }
+
     //4
     public void agregar(Dispositivo cliente) {
-        String sql = "insert into dispositivo(id) values(?)";
+        String sql = "insert into dispositivo(id,Tem,Hum,estado,ultimoRegistro) values(?,0.0,0.0,?,-1)";
         try {
             ps = s.con.prepareStatement(sql);
             ps.setInt(1, cliente.getId());
+            ps.setInt(2, parseBool(cliente.getEstado()));
             ps.executeUpdate();
         } catch (SQLException e) {
             System.err.println(e);
+        }
+    }
+    
+    public int parseBool(boolean b){
+        if(b){
+            return 0;
+        }else{
+            return 1;
         }
     }
 
@@ -86,6 +105,16 @@ public class Dispositivo {
             ps = s.con.prepareStatement(sql);
             ps.executeUpdate(sql);
             System.out.println("dispositivo Actualizado!");
+        } catch (SQLException e) {
+            System.err.println(e);
+        }
+    }
+
+    public void setEstadoDisp(Dispositivo cliente) {
+        String sql = "UPDATE dispositivo SET estado='" + parseBool(cliente.estado) + "' WHERE id=" + cliente.getId();
+        try {
+            ps = s.con.prepareStatement(sql);
+            ps.executeUpdate(sql);
         } catch (SQLException e) {
             System.err.println(e);
         }
