@@ -64,7 +64,6 @@ public class ClienteSocket {
 
     public void connect() {
         try {
-            //Se crea el socket para la conexion de clientes
             this.socket = new Socket(Host, Puerto);
             this.in = new DataInputStream(this.socket.getInputStream());
             String mensaje = this.in.readUTF();
@@ -72,10 +71,10 @@ public class ClienteSocket {
             String id = mensaje;
             System.out.println("Simulando Dispositivo...");
             Timer tiempo = new Timer();
-            tiempo.schedule(enviarDatos(Integer.parseInt(id)), 0, 20000);
+            tiempo.schedule(enviarDatos(Integer.parseInt(id)), 0, 5000);
         } catch (IOException ex) {
             Logger.getLogger(ClienteSocket.class
-                    .getName()).log(Level.SEVERE, null, ex);
+                    .getName()).log(Level.SEVERE, null, ex.getMessage());
         }
     }
 
@@ -97,7 +96,7 @@ public class ClienteSocket {
                     System.out.println(dato);
                     out.writeUTF(dato);
                 } catch (IOException ex) {
-                    System.out.println("QUE ESTA PASANDO AQUI" + ex);
+                    System.out.println("QUE ESTA PASANDO AQUI" + ex.getMessage());
                 }
             }
         };

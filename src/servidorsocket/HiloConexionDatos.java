@@ -48,20 +48,13 @@ public class HiloConexionDatos extends Thread {
                 clienteSocket = Servidor.accept();
                 DataOutputStream out = new DataOutputStream(clienteSocket.getOutputStream());
                 out.writeUTF(String.valueOf(clienteSocket.hashCode()));
-                EventConexion evtConexion = new EventConexion(this, new DataConexion(clienteSocket.getPort() + "", clienteSocket.getLocalAddress() + "", clienteSocket, clienteSocket.hashCode() + ""));
+                EventConexion evtConexion = new EventConexion(this, new DataConexion(String.valueOf(clienteSocket.getPort()), String.valueOf(clienteSocket.getLocalAddress()), clienteSocket, String.valueOf(clienteSocket.hashCode())));
                 DespachadorEventoConexion(evtConexion);
             } catch (IOException e) {
-                System.err.println("My Hilo escuchador se detuvo: " + e);
-            } finally {
-                try {
-                    System.out.println("");
-                } catch (Exception e) {
-                    System.err.println("que pasa:" + e);
-                }
-            }
+                System.err.println("My Hilo escuchador se detuvo: " + e.getMessage());
+            } 
         }
     }
-
     @Override
     public void interrupt() {
         this.Continue = false;

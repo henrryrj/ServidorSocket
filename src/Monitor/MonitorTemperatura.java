@@ -53,7 +53,7 @@ public class MonitorTemperatura implements ISocketListener {
         if (cl.existe(cl.getId())) {
             cl.setEstado(false);
             cl.setEstadoDisp(cl);
-            System.out.println("Dispositivo( " + cl.getId() + " ): Adios!");
+            System.out.println("Dispositivo( " + cl.getId() + " ): Adios! \n");
         }
     }
 

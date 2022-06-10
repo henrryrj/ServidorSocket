@@ -33,7 +33,7 @@ public class ServidorSocket implements ISocketListener {
             MonitorTemperatura monitor = new MonitorTemperatura();
             conexionClientes.addEscuchadorConexion(this, monitor);
         } catch (IOException e) {
-            System.out.println("algo paso con el servidor: " + e);
+            System.err.println("algo paso con el servidor: " + e.getMessage());
         }
     }
 
@@ -48,23 +48,23 @@ public class ServidorSocket implements ISocketListener {
             MonitorTemperatura monitor = new MonitorTemperatura();
             hem.addEscuchadorMensaje(this, monitor);
             DataCliente dc = new DataCliente(e.dato.getSocketCliente(), hem);
-            this.clientesConectados.put(e.dato.getSocketCliente().hashCode() + "", dc);
-            System.out.println("Nuevo Cliente Conectado: " + e.dato.getSocketCliente().hashCode() + "");
+            this.clientesConectados.put(String.valueOf(e.dato.getSocketCliente().hashCode()), dc);
+            System.out.println("Nuevo Cliente Conectado: " + String.valueOf(e.dato.getSocketCliente().hashCode()));
             e.dato.setIdCliente(String.valueOf(e.dato.getSocketCliente().hashCode()));
             System.out.println("Clientes conectados: " + this.clientesConectados.size());
             hem.start();
         } catch (Exception ex) {
-            System.out.println(ex);
+            System.err.println("ERROR EN EL EVENTO onClienteConectado DEL SERVER_SOCKET: " + ex.getMessage());
         }
 
     }
 
     @Override
     public void onClienteDesconectado(EventConexion e) {
-        String key = e.dato.getSocketCliente().hashCode() + "";
+        String key = String.valueOf(e.dato.getSocketCliente().hashCode());
         this.clientesConectados.remove(key);
         System.out.println("Cliente Desconectado: " + key);
-        System.out.println("Clientes Conectados : " + this.clientesConectados.size() + "\n");
+        System.out.println("Clientes Conectados : " + this.clientesConectados.size());
     }
 
     @Override

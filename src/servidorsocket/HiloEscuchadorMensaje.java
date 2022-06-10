@@ -10,6 +10,8 @@ import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.event.EventListenerList;
 
 /**
@@ -36,7 +38,7 @@ public class HiloEscuchadorMensaje extends Thread {
 
     }
 
-    void removeEscuchadorMensaje(ISocketListener l,ISocketListener m) {
+    void removeEscuchadorMensaje(ISocketListener l, ISocketListener m) {
         listSocketListener.remove(ISocketListener.class, l);
         listSocketListener.remove(ISocketListener.class, m);
 
@@ -45,27 +47,27 @@ public class HiloEscuchadorMensaje extends Thread {
     @Override
     public void run() {
         try {
-            in = new BufferedInputStream(clienteSocket.getInputStream(),128);
+            in = new BufferedInputStream(clienteSocket.getInputStream(), 128);
             while (Contiene) {
                 System.out.println("Escuchando mensaje del cliente...");
-                byte[] clienteCommando=new byte[128];
+                byte[] clienteCommando = new byte[128];
                 in.read(clienteCommando);
                 String m = new String(clienteCommando, StandardCharsets.UTF_8);
                 DespachadorEventoMensaje(new EventMensaje(this, m, this.datos));
             }
         } catch (IOException e) {
-            System.out.println("cliente desconectado. Dejando de escuchar mensajes...\n");
-        } finally {
             try {
-                EventConexion evtConexion = new EventConexion(this, new DataConexion(clienteSocket.getPort() + "", clienteSocket.getLocalAddress() + "", clienteSocket, clienteSocket.hashCode() +""));
-                CerrarEventoConexion(evtConexion);
-                in.close();
-                clienteSocket.close();
-            } catch (IOException e) {
-                System.err.println(e);
+                if (e.getMessage().equals("Connection reset")) {
+                    System.out.println("cliente desconectado ( "+ String.valueOf(clienteSocket.hashCode()) + " ). Dejando de escuchar mensajes...");
+                    EventConexion evtConexion = new EventConexion(this, new DataConexion(String.valueOf(clienteSocket.getPort()), String.valueOf(clienteSocket.getLocalAddress()), clienteSocket, String.valueOf(clienteSocket.hashCode())));
+                    CerrarEventoConexion(evtConexion);
+                    in.close();
+                    clienteSocket.close();
+                }
+            } catch (IOException ex) {
+                System.err.println("HILO_ESCUCHADOR: " + ex.getMessage());
             }
         }
-
     }
 
     protected void DespachadorEventoMensaje(EventMensaje e) {
