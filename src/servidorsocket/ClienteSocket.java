@@ -5,6 +5,7 @@
  */
 package servidorsocket;
 
+import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -12,6 +13,9 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.FileReader;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.Properties;
 import java.util.Timer;
@@ -25,8 +29,8 @@ public class ClienteSocket {
 
     private String Host;
     private int Puerto;
-    private DataOutputStream out;
-    private DataInputStream in;
+    private OutputStream out;
+    private InputStream in;
     private final boolean Continua = true;
     private Socket socket = null;
 
@@ -48,25 +52,17 @@ public class ClienteSocket {
     }
 
     public void setPuerto(int Puerto) {
-        
-        this.Puerto = Puerto;
-    }
 
-    public void escuchandoMensaje() {
-        try {
-            this.in = new DataInputStream(this.socket.getInputStream());
-            String mensaje = this.in.readUTF();
-            System.out.println(mensaje);
-        } catch (IOException ex) {
-            Logger.getLogger(ClienteSocket.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.Puerto = Puerto;
     }
 
     public void connect() {
         try {
             this.socket = new Socket(Host, Puerto);
-            this.in = new DataInputStream(this.socket.getInputStream());
-            String mensaje = this.in.readUTF();
+            this.in = socket.getInputStream();
+            byte[] clienteCommando = new byte[256];
+            in.read(clienteCommando, 0, 256);
+            String mensaje = new String(clienteCommando, StandardCharsets.UTF_8).trim();
             System.out.println("Id Asignado: " + mensaje);
             String id = mensaje;
             System.out.println("Simulando Dispositivo...");
@@ -83,7 +79,7 @@ public class ClienteSocket {
             @Override
             public void run() {
                 try {
-                    out = new DataOutputStream(socket.getOutputStream());
+                    out = new BufferedOutputStream(socket.getOutputStream());
                     String dato = "";
                     DecimalFormat formato1 = new DecimalFormat("#.00");
                     double tem = (double) (Math.random() * 60);
@@ -91,10 +87,11 @@ public class ClienteSocket {
                     long tiempo = (long) (Math.random() * 1000000);
                     tem = Double.parseDouble(formato1.format(tem).replace(",", "."));
                     hum = Double.parseDouble(formato1.format(hum).replace(",", "."));
-                    dato ="Id=" + id + "|Temp=" + tem + "|Hum="+hum+"|Tiempo="+tiempo;
+                    dato = "Id=" + id + "|Temp=" + tem + "|Hum=" + hum + "|Tiempo=" + tiempo;
                     //dato = "cualquier cosa";
                     System.out.println(dato);
-                    out.writeUTF(dato);
+                    out.write(dato.getBytes());
+                    out.flush();
                 } catch (IOException ex) {
                     System.out.println("QUE ESTA PASANDO AQUI" + ex.getMessage());
                 }

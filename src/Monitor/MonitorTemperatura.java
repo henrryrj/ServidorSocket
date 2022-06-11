@@ -59,6 +59,7 @@ public class MonitorTemperatura implements ISocketListener {
 
     @Override
     public void onMensajeCliente(EventMensaje e) {
+
         try {
             LinkedList<String> lista = listaDeDatos(e.getMensage());
             if (!lista.isEmpty()) {
@@ -86,33 +87,54 @@ public class MonitorTemperatura implements ISocketListener {
                 return new LinkedList<>();
             }
             if (i == 3) {
-                dato = parse.substring(posIncial + 1, parse.indexOf("\u0000"));
-                parse = parse.substring(posIncial + 1, parse.indexOf("\u0000"));
+                dato = parse.substring(posIncial + 1, parse.length());
+                parse = parse.substring(posIncial + 1, parse.length());
 
             } else {
                 posBarra = parse.indexOf("|");
+                if (posBarra == -1) {
+                    return new LinkedList<>();
+                }
                 dato = parse.substring(posIncial + 1, posBarra);
                 parse = parse.substring(posBarra + 1, parse.length());
             }
             l1.add(dato);
+
         }
         return l1;
     }
 
     public void guardarTem(LinkedList<String> lista) {
-            sen.setIdCliente(Integer.parseInt(lista.get(0)));
-            sen.setTemp(Double.parseDouble(lista.get(1)));
-            sen.setHum(Double.parseDouble(lista.get(2)));
-            sen.setTiempo(lista.get(3));
-            sen.toSring();
-            cl.setId(Integer.parseInt(lista.get(0)));
-            cl.setTem(Double.parseDouble(lista.get(1)));
-            cl.setHum(Double.parseDouble(lista.get(2)));
-            String fechaReg = sen.agregar(sen);
-            if (!fechaReg.equals("-1")) {
-                cl.setUltimoRegistro(fechaReg);
-                cl.updateRegistro(cl);
-            }
+        String id = lista.get(0);
+        String temp = lista.get(0);
+        String hum = lista.get(0);
+        String tiempo = lista.get(0);
+        if (id.equals("")) {
+            System.out.println("Debe especificar su Id Asignado!!!");
+            return;
+        }
+        if (temp.equals("")) {
+            temp = "0.0";
+        }
+        if (hum.equals("")) {
+            hum = " 0.0";
+        }
+        if (tiempo.equals("")) {
+            tiempo = "0.0";
+        }
+        sen.setIdCliente(Integer.parseInt(id));
+        sen.setTemp(Double.parseDouble(temp));
+        sen.setHum(Double.parseDouble(hum));
+        sen.setTiempo(tiempo);
+        sen.toSring();
+        cl.setId(Integer.parseInt(id));
+        cl.setTem(Double.parseDouble(temp));
+        cl.setHum(Double.parseDouble(hum));
+        String fechaReg = sen.agregar(sen);
+        if (!fechaReg.equals("-1")) {
+            cl.setUltimoRegistro(fechaReg);
+            cl.updateRegistro(cl);
+        }
     }
 
     public static void main(String[] args) throws Exception {

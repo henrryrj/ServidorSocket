@@ -6,8 +6,10 @@
 package servidorsocket;
 
 
+import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import javax.swing.event.EventListenerList;
@@ -46,8 +48,9 @@ public class HiloConexionDatos extends Thread {
             try {
                 Socket clienteSocket;
                 clienteSocket = Servidor.accept();
-                DataOutputStream out = new DataOutputStream(clienteSocket.getOutputStream());
-                out.writeUTF(String.valueOf(clienteSocket.hashCode()));
+                OutputStream out = new BufferedOutputStream(clienteSocket.getOutputStream());
+                out.write(String.valueOf(clienteSocket.hashCode()).getBytes());
+                out.flush();
                 EventConexion evtConexion = new EventConexion(this, new DataConexion(String.valueOf(clienteSocket.getPort()), String.valueOf(clienteSocket.getLocalAddress()), clienteSocket, String.valueOf(clienteSocket.hashCode())));
                 DespachadorEventoConexion(evtConexion);
             } catch (IOException e) {
