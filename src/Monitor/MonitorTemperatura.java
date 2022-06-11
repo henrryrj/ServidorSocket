@@ -106,9 +106,9 @@ public class MonitorTemperatura implements ISocketListener {
 
     public void guardarTem(LinkedList<String> lista) {
         String id = lista.get(0);
-        String temp = lista.get(0);
-        String hum = lista.get(0);
-        String tiempo = lista.get(0);
+        String temp = lista.get(1);
+        String hum = lista.get(2);
+        String tiempo = lista.get(3);
         if (id.equals("")) {
             System.out.println("Debe especificar su Id Asignado!!!");
             return;
