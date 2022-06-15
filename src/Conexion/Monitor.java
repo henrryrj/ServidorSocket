@@ -101,15 +101,12 @@ public class Monitor {
         String fecha = LocalDateTime.now().toString();
         return fecha.replace("T", " ");
     }
-
     public void toSring() {
         System.out.println("Monitor: {");
-        //System.out.println("id: " + this.id);
         System.out.println("idCliente: " + this.idCliente);
         System.out.println("Temp: " + this.Temp);
         System.out.println("Hum: " + this.Hum);
         System.out.println("Tiempo: " + this.Tiempo);
-        //System.out.println("time: " + this.time);
         System.out.println("}");
     }
 

@@ -6,8 +6,6 @@
 package servidorsocket;
 
 import java.io.BufferedOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -18,6 +16,7 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.Properties;
+import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -31,7 +30,6 @@ public class ClienteSocket {
     private int Puerto;
     private OutputStream out;
     private InputStream in;
-    private final boolean Continua = true;
     private Socket socket = null;
 
     public ClienteSocket(String Host, int Puerto) {
@@ -66,8 +64,32 @@ public class ClienteSocket {
             System.out.println("Id Asignado: " + mensaje);
             String id = mensaje;
             System.out.println("Simulando Dispositivo...");
+//            while (true) {
+//                out = new BufferedOutputStream(socket.getOutputStream());
+//                String dato = "";
+//                DecimalFormat formato1 = new DecimalFormat("#.00");
+//                double tem = (double) (Math.random() * 60);
+//                double hum = (double) (Math.random() * 80);
+//                long tiempo = (long) (Math.random() * 1000000);
+//                tem = Double.parseDouble(formato1.format(tem).replace(",", "."));
+//                hum = Double.parseDouble(formato1.format(hum).replace(",", "."));
+//                dato = "Id=" + id + "|Temp=" + tem + "|Hum=" + hum + "|Tiempo=" + tiempo;
+//                //dato = "cualquier cosa";
+//                System.out.println(dato);
+//                out.write(dato.getBytes());
+//                out.flush();
+//                Scanner entradaEscaner = new Scanner(System.in);
+//                String tec = entradaEscaner.next();
+//                if (tec.equals("salir")) {
+//                    out.close();
+//                    socket.close();
+//                    System.out.println("cliente desconectado!");
+//                    break;
+//                }
+//            }
             Timer tiempo = new Timer();
             tiempo.schedule(enviarDatos(Integer.parseInt(id)), 0, 5000);
+
         } catch (IOException ex) {
             Logger.getLogger(ClienteSocket.class
                     .getName()).log(Level.SEVERE, null, ex.getMessage());
@@ -92,8 +114,10 @@ public class ClienteSocket {
                     System.out.println(dato);
                     out.write(dato.getBytes());
                     out.flush();
+//                    out.close();
+//                    socket.close();
                 } catch (IOException ex) {
-                    System.out.println("QUE ESTA PASANDO AQUI" + ex.getMessage());
+                    System.err.println("CLIENTE SOCKET: " + ex.getMessage());
                 }
             }
         };
@@ -106,5 +130,4 @@ public class ClienteSocket {
         cl.connect();
 
     }
-
 }

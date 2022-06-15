@@ -59,7 +59,6 @@ public class MonitorTemperatura implements ISocketListener {
 
     @Override
     public void onMensajeCliente(EventMensaje e) {
-
         try {
             LinkedList<String> lista = listaDeDatos(e.getMensage());
             if (!lista.isEmpty()) {

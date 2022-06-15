@@ -51,7 +51,7 @@ public class ServidorSocket implements ISocketListener {
             this.clientesConectados.put(String.valueOf(e.dato.getSocketCliente().hashCode()), dc);
             System.out.println("Nuevo Cliente Conectado: " + String.valueOf(e.dato.getSocketCliente().hashCode()));
             e.dato.setIdCliente(String.valueOf(e.dato.getSocketCliente().hashCode()));
-            System.out.println("Clientes conectados: " + this.clientesConectados.size());
+            System.out.println("Clientes conectados: " + this.clientesConectados.size() + "\n");
             hem.start();
         } catch (Exception ex) {
             System.err.println("ERROR EN EL EVENTO onClienteConectado DEL SERVER_SOCKET: " + ex.getMessage());
@@ -64,7 +64,7 @@ public class ServidorSocket implements ISocketListener {
         String key = String.valueOf(e.dato.getSocketCliente().hashCode());
         this.clientesConectados.remove(key);
         System.out.println("Cliente Desconectado: " + key);
-        System.out.println("Clientes Conectados : " + this.clientesConectados.size());
+        System.out.println("Clientes Conectados : " + this.clientesConectados.size() + "\n");
     }
 
     @Override
