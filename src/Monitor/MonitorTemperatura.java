@@ -37,7 +37,14 @@ public class MonitorTemperatura implements ISocketListener {
 
     @Override
     public void onClienteConectado(EventConexion e) {
-        cl.setId(Integer.parseInt(e.getDato().getIdCliente()));
+        String idCliente = getIdDeLaTrama(e.getDato().getMsg());
+        if (idCliente.equals(e.getDato().getIdCliente())) {
+            System.out.println("Id asignado por el Server!!!");
+            cl.setId(Integer.parseInt(e.getDato().getIdCliente()));
+        } else {
+            System.out.println("EL cliente nos envio el Id!!!");
+            cl.setId(Integer.parseInt(idCliente));
+        }
         cl.setEstado(true);
         if (!cl.existe(cl.getId())) {
             cl.agregar(cl);
@@ -45,16 +52,27 @@ public class MonitorTemperatura implements ISocketListener {
             cl.setEstadoDisp(cl);
             System.out.println("Dispositivo( " + cl.getId() + " ): Bienvenido!");
         }
+        cl.pushNotificacionOnClientConnected(String.valueOf(cl.getId()));
     }
+    //hacer la api!!!!
 
     @Override
     public void onClienteDesconectado(EventConexion e) {
-        cl.setId(Integer.parseInt(e.getDato().getIdCliente()));
+        String idCliente = getIdDeLaTrama(e.getDato().getMsg());
+        if (idCliente.equals(e.getDato().getIdCliente())) {
+            System.out.println("Id asignado por el Server!!!");
+            cl.setId(Integer.parseInt(e.getDato().getIdCliente()));
+        } else {
+            System.out.println("EL cliente nos envio el Id!!!");
+            cl.setId(Integer.parseInt(idCliente));
+        }
         if (cl.existe(cl.getId())) {
             cl.setEstado(false);
             cl.setEstadoDisp(cl);
             System.out.println("Dispositivo( " + cl.getId() + " ): Adios! \n");
         }
+        //hacer la api!!!
+        cl.pushNotificationOnClienteDesconnected(String.valueOf(cl.getId()));
     }
 
     @Override
@@ -101,6 +119,16 @@ public class MonitorTemperatura implements ISocketListener {
 
         }
         return l1;
+    }
+
+    public String getIdDeLaTrama(String trama) {
+        int posIgual = trama.indexOf("=");
+        int posBarra = trama.indexOf("|");
+        if (posIgual != -1 && posBarra != -1) {
+            return trama.substring(posIgual + 1, posBarra);
+        } else {
+            return "-1";
+        }
     }
 
     public void guardarTem(LinkedList<String> lista) {

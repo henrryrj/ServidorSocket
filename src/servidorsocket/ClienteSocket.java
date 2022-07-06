@@ -73,7 +73,7 @@ public class ClienteSocket {
 //                long tiempo = (long) (Math.random() * 1000000);
 //                tem = Double.parseDouble(formato1.format(tem).replace(",", "."));
 //                hum = Double.parseDouble(formato1.format(hum).replace(",", "."));
-//                dato = "Id=" + id + "|Temp=" + tem + "|Hum=" + hum + "|Tiempo=" + tiempo;
+//                dato = "Id=" + 111111 + "|Temp=" + tem + "|Hum=" + hum + "|Tiempo=" + tiempo;
 //                //dato = "cualquier cosa";
 //                System.out.println(dato);
 //                out.write(dato.getBytes());
@@ -88,7 +88,7 @@ public class ClienteSocket {
 //                }
 //            }
             Timer tiempo = new Timer();
-            tiempo.schedule(enviarDatos(Integer.parseInt(id)), 0, 5000);
+            tiempo.schedule(enviarDatos(Integer.parseInt(id)), 0, 6000);
 
         } catch (IOException ex) {
             Logger.getLogger(ClienteSocket.class

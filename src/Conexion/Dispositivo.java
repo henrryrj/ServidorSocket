@@ -5,9 +5,15 @@
  */
 package Conexion;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -89,11 +95,11 @@ public class Dispositivo {
             System.err.println(e);
         }
     }
-    
-    public int parseBool(boolean b){
-        if(b){
+
+    public int parseBool(boolean b) {
+        if (b) {
             return 0;
-        }else{
+        } else {
             return 1;
         }
     }
@@ -130,6 +136,39 @@ public class Dispositivo {
             System.err.println(e);
         }
         return false;
+    }
+
+    public void pushNotificacionOnClientConnected(String id) {
+        try {
+            URL urlConectado;
+            urlConectado = new URL("https://api-node-mysql-sd.herokuapp.com/dispConectado/" + id);
+            HttpURLConnection connect = (HttpURLConnection) urlConectado.openConnection();
+            connect.setRequestMethod("GET");
+            connect.connect();
+            int resStatus = connect.getResponseCode();
+            if (resStatus == 200) {
+                System.out.println("NotificacionEnviada!: " + connect.getResponseMessage());
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Dispositivo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void pushNotificationOnClienteDesconnected(String id) {
+        try {
+            URL urlConectado;
+            urlConectado = new URL("https://api-node-mysql-sd.herokuapp.com/dispDesconectado/" + id);
+            HttpURLConnection connect = (HttpURLConnection) urlConectado.openConnection();
+            connect.setRequestMethod("GET");
+            connect.connect();
+            int resStatus = connect.getResponseCode();
+            if (resStatus == 200) {
+                System.out.println("NotificacionEnviada!: " + connect.getResponseMessage());
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Dispositivo.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }
