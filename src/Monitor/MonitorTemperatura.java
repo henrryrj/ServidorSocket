@@ -39,10 +39,8 @@ public class MonitorTemperatura implements ISocketListener {
     public void onClienteConectado(EventConexion e) {
         String idCliente = getIdDeLaTrama(e.getDato().getMsg());
         if (idCliente.equals(e.getDato().getIdCliente())) {
-            System.out.println("Id asignado por el Server!!!");
             cl.setId(Integer.parseInt(e.getDato().getIdCliente()));
         } else {
-            System.out.println("EL cliente nos envio el Id!!!");
             cl.setId(Integer.parseInt(idCliente));
         }
         cl.setEstado(true);
@@ -60,16 +58,14 @@ public class MonitorTemperatura implements ISocketListener {
     public void onClienteDesconectado(EventConexion e) {
         String idCliente = getIdDeLaTrama(e.getDato().getMsg());
         if (idCliente.equals(e.getDato().getIdCliente())) {
-            System.out.println("Id asignado por el Server!!!");
             cl.setId(Integer.parseInt(e.getDato().getIdCliente()));
         } else {
-            System.out.println("EL cliente nos envio el Id!!!");
             cl.setId(Integer.parseInt(idCliente));
         }
         if (cl.existe(cl.getId())) {
             cl.setEstado(false);
             cl.setEstadoDisp(cl);
-            System.out.println("Dispositivo( " + cl.getId() + " ): Adios! \n");
+            System.out.println("Dispositivo( " + cl.getId() + " ): Adios!");
         }
         //hacer la api!!!
         cl.pushNotificationOnClienteDesconnected(String.valueOf(cl.getId()));

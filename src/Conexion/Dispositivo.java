@@ -164,7 +164,7 @@ public class Dispositivo {
             connect.connect();
             int resStatus = connect.getResponseCode();
             if (resStatus == 200) {
-                System.out.println("NotificacionEnviada!: " + connect.getResponseMessage());
+                System.out.println("NotificacionEnviada!: " + connect.getResponseMessage() + "\n");
             }
         } catch (IOException ex) {
             Logger.getLogger(Dispositivo.class.getName()).log(Level.SEVERE, null, ex);

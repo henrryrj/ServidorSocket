@@ -9,10 +9,14 @@ import Monitor.MonitorTemperatura;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -22,19 +26,22 @@ import java.util.logging.Logger;
  *
  * @author stephani
  */
-public class ServidorSocket implements ISocketListener {
+public final class ServidorSocket implements ISocketListener {
 
     private ServerSocket Servidor = null;
     private HashMap<String, DataCliente> clientesConectados;
     HiloConexionDatos conexionClientes = null;
+    MonitorTemperatura monitor = null;
 
     public ServidorSocket(int Puerto) {
         try {
             Servidor = new ServerSocket(Puerto);
             clientesConectados = new HashMap<>();
             conexionClientes = new HiloConexionDatos(Servidor);
-            MonitorTemperatura monitor = new MonitorTemperatura();
+            monitor = new MonitorTemperatura();
             conexionClientes.addEscuchadorConexion(this, monitor);
+//            Timer tiempo = new Timer();
+//            tiempo.schedule(hiloVerificador(tiempo), 0, 10000);
         } catch (IOException e) {
             System.err.println("algo paso con el servidor: " + e.getMessage());
         }
@@ -60,7 +67,7 @@ public class ServidorSocket implements ISocketListener {
                 }
             }
             HiloEscuchadorMensaje hem = new HiloEscuchadorMensaje(this, e.dato.getSocketCliente(), e.dato);
-            MonitorTemperatura monitor = new MonitorTemperatura();
+            monitor = new MonitorTemperatura();
             hem.addEscuchadorMensaje(this, monitor);
             DataCliente dc = new DataCliente(e.dato.getSocketCliente(), hem);
             this.clientesConectados.put(String.valueOf(e.dato.getSocketCliente().hashCode()), dc);
@@ -88,8 +95,7 @@ public class ServidorSocket implements ISocketListener {
     }
 
     @Override
-    public void onMensajeCliente(EventMensaje e
-    ) {
+    public void onMensajeCliente(EventMensaje e) {
         System.out.println(e.mensaje + "\n");
     }
 
@@ -118,4 +124,33 @@ public class ServidorSocket implements ISocketListener {
             return "-1";
         }
     }
+
+//    public TimerTask hiloVerificador(Timer t) {
+//        return new TimerTask() {
+//            @Override
+//            public void run() {
+//                try {
+//                    if (clientesConectados.isEmpty()) {
+//                        System.out.println("sin clientes!!!");
+//                        return;
+//                    }
+//                    for (String i : clientesConectados.keySet()) {
+//                        DataCliente clienteActual = clientesConectados.get(i);
+//                        OutputStream out = clienteActual.getSocketClient().getOutputStream();
+//                        out.write("isRecheable".getBytes());
+//                        if(out == null){
+//                            System.out.println("sera que entra");
+//                        }
+//                    }
+//                } catch (IOException ex) {
+//                    if(ex.getMessage().equals("Connection reset by peer: socket write error")){
+//                        System.out.println("desconectamos a los locos XD");
+//                       // EventConexion evtConexion = new EventConexion(this, new DataConexion(String.valueOf(.getPort()), String.valueOf(clienteSocket.getLocalAddress()), clienteSocket, String.valueOf(clienteSocket.hashCode()), m));
+//                    }
+//                    //t.cancel();
+//                    System.err.println("ERROR HILO VERIFICADOR: " + ex.getMessage());
+//                }
+//            }
+//        };
+//    }
 }

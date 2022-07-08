@@ -13,6 +13,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.event.EventListenerList;
 
 /**
@@ -25,7 +29,8 @@ public class HiloEscuchadorMensaje extends Thread {
     private boolean bandera = true;
     private final EventListenerList listSocketListener;
     private InputStream in;
-    private final DataConexion datos;
+    OutputStream out;
+    private DataConexion datos;
 
     HiloEscuchadorMensaje(ServidorSocket owner, Socket s, DataConexion e) {
         this.clienteSocket = s;
@@ -49,42 +54,20 @@ public class HiloEscuchadorMensaje extends Thread {
     public void run() {
         try {
             in = clienteSocket.getInputStream();
+            Timer tiempo = new Timer();
+            tiempo.schedule(hiloVerificador(tiempo),0,1000);
             while (bandera) {
                 System.out.println("Escuchando mensaje del cliente...");
                 byte[] clienteCommando = new byte[256];
-                int resp = in.read(clienteCommando, 0, 256);
-                if (resp != -1) {
-                    String m = new String(clienteCommando, StandardCharsets.UTF_8).trim();
-                    DespachadorEventoMensaje(new EventMensaje(this, m, this.datos));
-                } else {
-                    String id = this.datos.getIdCliente();
-                    if (!clienteSocket.isConnected() || !clienteSocket.isClosed()) {
-                        if (!clienteSocket.getInetAddress().isReachable(30000)) {
-                            System.out.println("El cliente ( " + id + " ). no se volvio a conectar...");
-                            System.out.println("cliente desconectado ( " + id + " ). Dejando de escuchar mensajes...");
-                            EventConexion evtConexion = new EventConexion(this, new DataConexion(String.valueOf(clienteSocket.getPort()), String.valueOf(clienteSocket.getLocalAddress()), clienteSocket, String.valueOf(clienteSocket.hashCode()),this.datos.getMsg()));
-                            CerrarEventoConexion(evtConexion);
-                            in.close();
-                            clienteSocket.close();
-                            break;
-                        } else {
-                            if (clienteSocket.isBound()) {
-                                System.out.println("cliente desconectado ( " + id + " ). Dejando de escuchar mensajes...");
-                                EventConexion evtConexion = new EventConexion(this, new DataConexion(String.valueOf(clienteSocket.getPort()), String.valueOf(clienteSocket.getLocalAddress()), clienteSocket, String.valueOf(clienteSocket.hashCode()),this.datos.getMsg()));
-                                CerrarEventoConexion(evtConexion);
-                                in.close();
-                                clienteSocket.close();
-                                break;
-                            }
-                        }
-                    }
-                }
+                in.read(clienteCommando);
+                String m = new String(clienteCommando, StandardCharsets.UTF_8).trim();
+                DespachadorEventoMensaje(new EventMensaje(this, m, this.datos));
             }
         } catch (IOException e) {
             try {
                 if (e.getMessage().equals("Connection reset")) {
                     System.out.println("cliente desconectado ( " + this.datos.getIdCliente() + " ). Dejando de escuchar mensajes...");
-                    EventConexion evtConexion = new EventConexion(this, new DataConexion(String.valueOf(clienteSocket.getPort()), String.valueOf(clienteSocket.getLocalAddress()), clienteSocket, String.valueOf(clienteSocket.hashCode()),this.datos.getMsg()));
+                    EventConexion evtConexion = new EventConexion(this, new DataConexion(String.valueOf(clienteSocket.getPort()), String.valueOf(clienteSocket.getLocalAddress()), clienteSocket, String.valueOf(clienteSocket.hashCode()), this.datos.getMsg()));
                     CerrarEventoConexion(evtConexion);
                     in.close();
                     clienteSocket.close();
@@ -107,5 +90,32 @@ public class HiloEscuchadorMensaje extends Thread {
         for (ISocketListener l : ls) {
             l.onClienteDesconectado(e);
         }
+    }
+
+    public TimerTask hiloVerificador(Timer t) {
+        return new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                     out = clienteSocket.getOutputStream();
+                    out.write("isRechable".getBytes());
+                    out.flush();
+                } catch (IOException ex) {
+                    if (ex.getMessage().equals("Connection reset by peer: socket write error")) {
+                        System.out.println("cliente desconectado ( " + datos.getIdCliente() + " ). Dejando de escuchar mensajes...");
+                        EventConexion evtConexion = new EventConexion(this, new DataConexion(String.valueOf(clienteSocket.getPort()), String.valueOf(clienteSocket.getLocalAddress()), clienteSocket, String.valueOf(clienteSocket.hashCode()), datos.getMsg()));
+                        CerrarEventoConexion(evtConexion);
+                        t.cancel();
+                        bandera = !bandera;
+                        try {
+                            in.close();
+                            clienteSocket.close();
+                        } catch (IOException ex1) {
+                            Logger.getLogger(HiloEscuchadorMensaje.class.getName()).log(Level.SEVERE, null, ex1);
+                        }
+                    }
+                }
+            }
+        };
     }
 }
