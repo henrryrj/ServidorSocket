@@ -79,12 +79,12 @@ public class MonitorTemperatura implements ISocketListener {
                 guardarTem(lista);
                 Reglas r = new Reglas();
                 System.out.println("verificando temperatura...");
-                r.verificarReglas(sen.getTemp());
+                //r.verificarReglas(sen.getTemp());
             } else {
                 System.out.println("EL DISPOSITIVO( " + e.getDato().getIdCliente() + " ) No esta siguiendo el protocolo");
             }
 
-        } catch (IOException | SQLException | MessagingException ex) {
+        } catch (IOException ex) {
             Logger.getLogger(MonitorTemperatura.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
