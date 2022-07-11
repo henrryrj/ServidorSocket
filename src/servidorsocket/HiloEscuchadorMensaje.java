@@ -64,7 +64,6 @@ public class HiloEscuchadorMensaje extends Thread {
                 DespachadorEventoMensaje(new EventMensaje(this, m, this.datos));
             }
         } catch (IOException e) {
-            System.err.println("HILO_ESCUCHADOR: " + e.getMessage());
         }
     }
 
@@ -93,7 +92,7 @@ public class HiloEscuchadorMensaje extends Thread {
                 } catch (IOException ex) {
                     try {
                         if (ex.getMessage().equals("Connection reset by peer: socket write error")
-                                || ex.getMessage().equals("Connection reset")) {
+                                || ex.getMessage().equals("Connection reset") || ex.getMessage().equals("Read timed out")) {
                             System.out.println("cliente desconectado ( " + datos.getIdCliente() + " ). Dejando de escuchar mensajes...");
                             EventConexion evtConexion = new EventConexion(this, new DataConexion(String.valueOf(clienteSocket.getPort()), String.valueOf(clienteSocket.getLocalAddress()), clienteSocket, String.valueOf(clienteSocket.hashCode()), datos.getMsg()));
                             CerrarEventoConexion(evtConexion);
