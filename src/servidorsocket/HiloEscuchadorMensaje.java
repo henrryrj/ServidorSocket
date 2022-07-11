@@ -55,7 +55,7 @@ public class HiloEscuchadorMensaje extends Thread {
         try {
             in = clienteSocket.getInputStream();
             Timer tiempo = new Timer();
-            tiempo.schedule(hiloVerificador(tiempo),0,1000);
+            tiempo.schedule(hiloVerificador(tiempo), 0, 1000);
             while (bandera) {
                 System.out.println("Escuchando mensaje del cliente...");
                 byte[] clienteCommando = new byte[256];
@@ -97,7 +97,7 @@ public class HiloEscuchadorMensaje extends Thread {
             @Override
             public void run() {
                 try {
-                     out = clienteSocket.getOutputStream();
+                    out = clienteSocket.getOutputStream();
                     out.write("isRechable".getBytes());
                     out.flush();
                 } catch (IOException ex) {
