@@ -101,18 +101,18 @@ public class HiloEscuchadorMensaje extends Thread {
                     out.write("isRechable".getBytes());
                     out.flush();
                 } catch (IOException ex) {
-                    if (ex.getMessage().equals("Connection reset by peer: socket write error")) {
-                        System.out.println("cliente desconectado ( " + datos.getIdCliente() + " ). Dejando de escuchar mensajes...");
-                        EventConexion evtConexion = new EventConexion(this, new DataConexion(String.valueOf(clienteSocket.getPort()), String.valueOf(clienteSocket.getLocalAddress()), clienteSocket, String.valueOf(clienteSocket.hashCode()), datos.getMsg()));
-                        CerrarEventoConexion(evtConexion);
-                        t.cancel();
-                        bandera = !bandera;
-                        try {
+                    try {
+                        if (ex.getMessage().equals("Connection reset by peer: socket write error")) {
+                            System.out.println("cliente desconectado ( " + datos.getIdCliente() + " ). Dejando de escuchar mensajes...");
+                            EventConexion evtConexion = new EventConexion(this, new DataConexion(String.valueOf(clienteSocket.getPort()), String.valueOf(clienteSocket.getLocalAddress()), clienteSocket, String.valueOf(clienteSocket.hashCode()), datos.getMsg()));
+                            CerrarEventoConexion(evtConexion);
+                            t.cancel();
+                            bandera = !bandera;
                             in.close();
                             clienteSocket.close();
-                        } catch (IOException ex1) {
-                            Logger.getLogger(HiloEscuchadorMensaje.class.getName()).log(Level.SEVERE, null, ex1);
                         }
+                    } catch (IOException ex1) {
+                        Logger.getLogger(HiloEscuchadorMensaje.class.getName()).log(Level.SEVERE, null, ex1);
                     }
                 }
             }
