@@ -42,7 +42,7 @@ public class Mail {
         executor.submit(() -> {
             try {
                 final String correoRemitente = "erickvidal328@gmail.com";
-                final String password = "pcenowaxsmlysrhe";
+                final String password = "efrqnlwbkqfixizo";
                 MimeMessage contenedor = new MimeMessage(session);
                 contenedor.setFrom(new InternetAddress(correoRemitente));
                 contenedor.addRecipient(Message.RecipientType.TO, new InternetAddress(correo));
