@@ -15,9 +15,9 @@ public class Conexion {
     Connection con;
     public Connection getConnection(){
         
-        String url="jdbc:mysql://lyn7gfxo996yjjco.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/ta8n3f167849xcmb";
-        String user="ezavw7z2w51th1gn";
-        String pass="oyxj6mhjwrl1qrp1";
+        String url="jdbc:mysql://lcpbq9az4jklobvq.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/n9n7mcbwue2jqi15";
+        String user="qjo6u6wws7494j3b";
+        String pass="ayp4dq7o4ie548uf";
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
             con=DriverManager.getConnection(url,user,pass);
