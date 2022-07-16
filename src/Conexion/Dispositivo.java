@@ -21,7 +21,7 @@ import java.util.logging.Logger;
  */
 public class Dispositivo {
 
-    int id;
+    String id;
     double Tem;
     double Hum;
     boolean estado;
@@ -35,7 +35,7 @@ public class Dispositivo {
         this.s = Singleton.getInstancia();
     }
 
-    public Dispositivo(int id, double tem, double hum, String fechaReg, boolean estado) {
+    public Dispositivo(String id, double tem, double hum, String fechaReg, boolean estado) {
         this.id = id;
         this.Tem = tem;
         this.Hum = hum;
@@ -43,8 +43,8 @@ public class Dispositivo {
         this.ultimoRegistro = fechaReg;
     }
 
-    public int getId() {
-        return id;
+    public String getId() {
+        return this.id;
     }
 
     public double getTem() {
@@ -63,7 +63,7 @@ public class Dispositivo {
         return this.estado;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -85,28 +85,20 @@ public class Dispositivo {
 
     //4
     public void agregar(Dispositivo cliente) {
-        String sql = "insert into dispositivo(id,Tem,Hum,estado,ultimoRegistro) values(?,0.0,0.0,?,-1)";
+        String sql = "INSERT INTO dispositivo(id,temp,hum,estado,ultimoRegistro) VALUES(?,0.0,0.0,?,-1)";
         try {
             ps = s.con.prepareStatement(sql);
-            ps.setInt(1, cliente.getId());
-            ps.setInt(2, parseBool(cliente.getEstado()));
+            ps.setString(1, cliente.getId());
+            ps.setBoolean(2, cliente.getEstado());
             ps.executeUpdate();
         } catch (SQLException e) {
-            System.err.println(e);
-        }
-    }
-
-    public int parseBool(boolean b) {
-        if (b) {
-            return 0;
-        } else {
-            return 1;
+            System.err.println(e.getMessage());
         }
     }
 
     public void updateRegistro(Dispositivo disp) {
         //String sql = "insert into dispositivo(id) values(?)";
-        String sql = "UPDATE dispositivo SET Tem ='" + disp.getTem() + "', Hum ='" + disp.getHum() + "', ultimoRegistro ='" + disp.getUltimoRegistro() + "' WHERE id =" + disp.getId();
+        String sql = "UPDATE dispositivo SET temp ='" + disp.getTem() + "', hum ='" + disp.getHum() + "', ultimoRegistro ='" + disp.getUltimoRegistro() + "' WHERE id ='" + disp.id + "'" ;
         try {
             ps = s.con.prepareStatement(sql);
             ps.executeUpdate(sql);
@@ -117,7 +109,7 @@ public class Dispositivo {
     }
 
     public void setEstadoDisp(Dispositivo cliente) {
-        String sql = "UPDATE dispositivo SET estado='" + parseBool(cliente.estado) + "' WHERE id=" + cliente.getId();
+        String sql = "UPDATE dispositivo SET estado=" +cliente.estado + " WHERE id='" + cliente.id + "'" ;
         try {
             ps = s.con.prepareStatement(sql);
             ps.executeUpdate(sql);
@@ -126,8 +118,8 @@ public class Dispositivo {
         }
     }
 
-    public boolean existe(int id) {
-        String sql = "select id from dispositivo where id=" + id;
+    public boolean existe(String id) {
+        String sql = "select id from dispositivo where id='" + id + "'" ;
         try {
             ps = s.con.prepareStatement(sql);
             rs = ps.executeQuery(sql);
@@ -146,6 +138,7 @@ public class Dispositivo {
             connect.setRequestMethod("GET");
             connect.connect();
             int resStatus = connect.getResponseCode();
+            System.out.println(resStatus);
             if (resStatus == 200) {
                 System.out.println("NotificacionEnviada!: " + connect.getResponseMessage());
             }

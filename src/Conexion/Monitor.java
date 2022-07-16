@@ -17,10 +17,10 @@ import java.time.LocalDateTime;
 public class Monitor {
 
     int id;
-    int idCliente;
-    double Temp;
-    double Hum;
-    String Tiempo;
+    String idDispositivo;
+    double temp;
+    double hum;
+    String tiempo;
     String time;
 
     PreparedStatement ps;
@@ -31,59 +31,59 @@ public class Monitor {
         this.s = Singleton.getInstancia();
     }
 
-    public Monitor(int id, int idCliente, double Temp, double Hum, String Tiempo, PreparedStatement ps, ResultSet rs, Singleton s) {
+    public Monitor(int id, String idDispositivo, double temp, double hum, String Tiempo, PreparedStatement ps, ResultSet rs, Singleton s) {
         this.id = id;
-        this.idCliente = idCliente;
-        this.Temp = Temp;
-        this.Hum = Hum;
-        this.Tiempo = Tiempo;
+        this.idDispositivo = idDispositivo;
+        this.temp = temp;
+        this.hum = hum;
+        this.tiempo = Tiempo;
     }
 
     public int getId() {
         return id;
     }
 
-    public int getIdCliente() {
-        return idCliente;
+    public String getIdDispositivo() {
+        return this.idDispositivo;
     }
 
     public double getTemp() {
-        return Temp;
+        return this.temp;
     }
 
     public double getHum() {
-        return Hum;
+        return this.hum;
     }
 
     public String getTiempo() {
-        return Tiempo;
+        return this.tiempo;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public void setIdCliente(int idCliente) {
-        this.idCliente = idCliente;
+    public void setIdDispositivo(String idDisp) {
+        this.idDispositivo = idDisp;
     }
 
-    public void setTemp(double Temp) {
-        this.Temp = Temp;
+    public void setTemp(double temp) {
+        this.temp = temp;
     }
 
-    public void setHum(double Hum) {
-        this.Hum = Hum;
+    public void setHum(double hum) {
+        this.hum = hum;
     }
 
-    public void setTiempo(String Tiempo) {
-        this.Tiempo = Tiempo;
+    public void setTiempo(String tiempo) {
+        this.tiempo = tiempo;
     }
 
     public String agregar(Monitor sensor) {
-        String sql = "insert into monitor(idCliente,Temp,Hum,Tiempo,time) values(?,?,?,?,?)";
+        String sql = "insert into monitor(idDispositivo,temp,hum,tiempo,time) values(?,?,?,?,?)";
         try {
             ps = s.con.prepareStatement(sql);
-            ps.setInt(1, sensor.getIdCliente());
+            ps.setString(1, sensor.getIdDispositivo());
             ps.setDouble(2, sensor.getTemp());
             ps.setDouble(3, sensor.getHum());
             ps.setString(4, sensor.getTiempo());
@@ -103,10 +103,10 @@ public class Monitor {
     }
     public void toSring() {
         System.out.println("Monitor: {");
-        System.out.println("idCliente: " + this.idCliente);
-        System.out.println("Temp: " + this.Temp);
-        System.out.println("Hum: " + this.Hum);
-        System.out.println("Tiempo: " + this.Tiempo);
+        System.out.println("idDispositivo: " + this.idDispositivo);
+        System.out.println("Temp: " + this.temp);
+        System.out.println("Hum: " + this.hum);
+        System.out.println("Tiempo: " + this.tiempo);
         System.out.println("}");
     }
 

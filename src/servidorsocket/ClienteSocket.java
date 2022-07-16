@@ -88,7 +88,7 @@ public class ClienteSocket {
 //                }
 //            }
             Timer tiempo = new Timer();
-            tiempo.schedule(enviarDatos(Integer.parseInt(id)), 0, 6000);
+            tiempo.schedule(enviarDatos("Dispositivo FMS"), 0, 30000);
 
         } catch (IOException ex) {
             Logger.getLogger(ClienteSocket.class
@@ -96,7 +96,7 @@ public class ClienteSocket {
         }
     }
 
-    public TimerTask enviarDatos(int id) {
+    public TimerTask enviarDatos(String id) {
         return new TimerTask() {
             @Override
             public void run() {

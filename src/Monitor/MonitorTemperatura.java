@@ -26,7 +26,6 @@ import servidorsocket.EventMensaje;
 public class MonitorTemperatura implements ISocketListener {
 
     Dispositivo cl;
-    //Temperatura tem;
     Monitor sen;
 
     public MonitorTemperatura() {
@@ -39,9 +38,9 @@ public class MonitorTemperatura implements ISocketListener {
     public void onClienteConectado(EventConexion e) {
         String idCliente = getIdDeLaTrama(e.getDato().getMsg());
         if (idCliente.equals(e.getDato().getIdCliente())) {
-            cl.setId(Integer.parseInt(e.getDato().getIdCliente()));
+            cl.setId(e.getDato().getIdCliente());
         } else {
-            cl.setId(Integer.parseInt(idCliente));
+            cl.setId(idCliente);
         }
         cl.setEstado(true);
         if (!cl.existe(cl.getId())) {
@@ -50,7 +49,7 @@ public class MonitorTemperatura implements ISocketListener {
             cl.setEstadoDisp(cl);
             System.out.println("Dispositivo( " + cl.getId() + " ): Bienvenido!");
         }
-        cl.pushNotificacionOnClientConnected(String.valueOf(cl.getId()));
+        cl.pushNotificacionOnClientConnected(cl.getId());
     }
     //hacer la api!!!!
 
@@ -58,9 +57,9 @@ public class MonitorTemperatura implements ISocketListener {
     public void onClienteDesconectado(EventConexion e) {
         String idCliente = getIdDeLaTrama(e.getDato().getMsg());
         if (idCliente.equals(e.getDato().getIdCliente())) {
-            cl.setId(Integer.parseInt(e.getDato().getIdCliente()));
+            cl.setId(e.getDato().getIdCliente());
         } else {
-            cl.setId(Integer.parseInt(idCliente));
+            cl.setId(idCliente);
         }
         if (cl.existe(cl.getId())) {
             cl.setEstado(false);
@@ -68,13 +67,14 @@ public class MonitorTemperatura implements ISocketListener {
             System.out.println("Dispositivo( " + cl.getId() + " ): Adios!");
         }
         //hacer la api!!!
-        cl.pushNotificationOnClienteDesconnected(String.valueOf(cl.getId()));
+        cl.pushNotificationOnClienteDesconnected(cl.getId());
     }
 
     @Override
     public void onMensajeCliente(EventMensaje e) {
         try {
-            LinkedList<String> lista = listaDeDatos(e.getMensage());
+        LinkedList<String> lista = listaDeDatos(e.getMensage());
+        System.out.println(lista);
             if (!lista.isEmpty()) {
                 guardarTem(lista);
                 Reglas r = new Reglas();
@@ -145,12 +145,12 @@ public class MonitorTemperatura implements ISocketListener {
         if (tiempo.equals("")) {
             tiempo = "0.0";
         }
-        sen.setIdCliente(Integer.parseInt(id));
+        sen.setIdDispositivo(id);
         sen.setTemp(Double.parseDouble(temp));
         sen.setHum(Double.parseDouble(hum));
         sen.setTiempo(tiempo);
         sen.toSring();
-        cl.setId(Integer.parseInt(id));
+        cl.setId(id);
         cl.setTem(Double.parseDouble(temp));
         cl.setHum(Double.parseDouble(hum));
         String fechaReg = sen.agregar(sen);
