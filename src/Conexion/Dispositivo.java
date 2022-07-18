@@ -133,12 +133,11 @@ public class Dispositivo {
     public void pushNotificacionOnClientConnected(String id) {
         try {
             URL urlConectado;
-            urlConectado = new URL("https://api-node-mysql-sd.herokuapp.com/dispConectado/" + id);
+            urlConectado = new URL("https://api-node-mysql-sd.herokuapp.com/dispConectado/" + id.replace(' ', '-'));
             HttpURLConnection connect = (HttpURLConnection) urlConectado.openConnection();
             connect.setRequestMethod("GET");
             connect.connect();
             int resStatus = connect.getResponseCode();
-            System.out.println(resStatus);
             if (resStatus == 200) {
                 System.out.println("NotificacionEnviada!: " + connect.getResponseMessage());
             }
@@ -151,7 +150,7 @@ public class Dispositivo {
     public void pushNotificationOnClienteDesconnected(String id) {
         try {
             URL urlConectado;
-            urlConectado = new URL("https://api-node-mysql-sd.herokuapp.com/dispDesconectado/" + id);
+            urlConectado = new URL("https://api-node-mysql-sd.herokuapp.com/dispDesconectado/" + id.replace(' ', '-'));
             HttpURLConnection connect = (HttpURLConnection) urlConectado.openConnection();
             connect.setRequestMethod("GET");
             connect.connect();
